@@ -3,8 +3,6 @@
 import numpy as np
 import pandas as pd
 
-# graphene: step = 1.42
-
 class HexLattice:
     def __init__(self):
         self.angle = np.deg2rad(60)

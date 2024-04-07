@@ -1,0 +1,56 @@
+# Lorenzo Manunza 18th March 2024
+
+# INITIALIZATION
+#---------------
+units           metal
+dimension	    3
+processors      * * *
+boundary        p p p
+atom_style      atomic
+
+# ATOMS
+#------
+atom_style      atomic
+read_data       atoms.dat
+
+# POTENTIAL
+#----------
+pair_style      airebo 3.0 0 0
+pair_coeff * * CH.airebo C            # airebo
+
+# PARAMETERS
+#-----------
+timestep        0.001 
+# velocity        all create 1.0 42 dist gaussian
+
+# OUTPUTS
+#--------
+thermo  100
+thermo_style custom step atoms temp etotal
+dump    1 all custom 100 md.lammpstrj id x y z vx vy vz
+
+# MINIMIZATION
+#-------------
+minimize 1.0e-10 1.0e-10 10000 10000
+
+# NPT
+#----
+fix     NPT all npt temp 1 1 1 iso 0 0 1
+run     10000
+unfix   NPT
+
+# HEATING
+#--------
+fix     HEATING all nvt temp 1.0 300.0 1
+run     200000
+unfix   HEATING
+
+# EQUILIBRATION
+#--------------
+fix     EQUI all nve
+run     10000
+unfix   EQUI
+
+# SAVE ATOMS
+#-----------
+write_dump all custom dump.atoms id type x y z vx vy vz
