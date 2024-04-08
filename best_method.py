@@ -3,12 +3,18 @@
 from create.hex import HexLattice
 from create.box import create_box
 from create.second_layer import add_second_layer
+from data.plot import PlotCrystal
 from data.write import WriteAtoms
 from utils.settings import*
 from utils.path import Path
 from utils.today import today
 
 import numpy as np
+import os
+
+# only when running
+os.system('conda activate my-lammps')
+os.system('export OMP_NUM_THREADS=1')
 
 # initialization
 lattice = 'graphene'
@@ -22,9 +28,11 @@ atoms = lattices[lattice]['atoms']
 square_width, height = 12, 21
 
 # methods
-ANGLES = np.concatenate((np.arange(0, 2, 0.1), np.arange(2, 10), np.arange(10, 50, 5)))
-SHAPES = [(width, height) for width in range(square_width, height)]
-print(len(ANGLES), len(SHAPES))
+ANGLES = [0, 10]
+SHAPES = [(4, 6), (5, 6)]
+
+# ANGLES = np.concatenate((np.arange(0, 2, 0.1), np.arange(2, 10), np.arange(10, 50, 5)))
+# SHAPES = [(width, height) for width in range(square_width, height)]
 
 for shape in SHAPES:
     # create new path
@@ -46,3 +54,7 @@ for shape in SHAPES:
         # save atoms
         WriteAtoms().write(DF = DF, atoms = atoms, filename = path_to_save, 
                            title = f'Lorenzo Manunza {today()}', box = box)
+
+        # PlotCrystal().plot_2d([DF])
+        os.system(f'cd {dir_path}')
+        os.system(f'mpirun -np 56 lmp -in in.TO_300K')

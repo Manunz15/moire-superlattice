@@ -7,28 +7,9 @@ class HexLattice:
     def __init__(self):
         self.angle = np.deg2rad(60)
         self.columns = ['x', 'y']
-
-    def factors(self, num: int):
-        div1 = 1
-
-        # find most-squared factors
-        for i in range(1, int(np.sqrt(num) + 1)):
-            if not num % i:
-                div1 = i # if i != int(np.sqrt(num)) else div1    # not square root
-        
-        div2 = num // div1
-
-        return min(div1, div2), max(div1, div2)
     
-    def create(self, step: float = 1, num_atoms: int = 4, dim: tuple = None, atom_types: int = 1):
-        
-        # number of atoms
-        if num_atoms % 4:
-            raise ValueError('Number of atoms must be multiple of 4')
-        else:
-            rows, cols = self.factors(num_atoms // 4) 
-
-        rows, cols = dim if dim else (rows, cols)
+    def create(self, step: float = 1, dim: tuple = (1, 1), atom_types: int = 1):
+        rows, cols = dim
 
         # types of atoms
         if atom_types not in [1, 2]:
@@ -47,17 +28,17 @@ class HexLattice:
                         [STEP * (1 + np.cos(ANGLE)), STEP * np.sin(ANGLE)],
                         [STEP * (1 + 2 * np.cos(ANGLE)), 0]])
 
-        DF = pd.DataFrame(columns = COLUMNS)
-
         # create lattice
+        DFs = []
         for nx in range(rows):
             for ny in range(cols):
                 new_ATOMS = BASE.copy()
                 new_ATOMS[:, 0] += x_STEP * nx
                 new_ATOMS[:, 1] += y_STEP * ny
 
-                new_DF = pd.DataFrame(new_ATOMS, columns = COLUMNS)
-                DF = pd.concat([DF, new_DF], ignore_index = True)
+                DFs.append(pd.DataFrame(new_ATOMS, columns = COLUMNS))
+
+        DF = pd.concat(DFs, ignore_index = True)
 
         # id and z columns
         num_atoms = len(DF)
