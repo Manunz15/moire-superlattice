@@ -12,10 +12,6 @@ from utils.today import today
 import numpy as np
 import os
 
-# only when running
-os.system('conda activate my-lammps')
-os.system('export OMP_NUM_THREADS=1')
-
 # initialization
 lattice = 'graphene'
 path = Path(path = [lattice, 'best_method'])
@@ -56,5 +52,10 @@ for shape in SHAPES:
                            title = f'Lorenzo Manunza {today()}', box = box)
 
         # PlotCrystal().plot_2d([DF])
+
+        # only when running
+        os.system('conda activate my-lammps')
+        os.system('export OMP_NUM_THREADS=1')
         os.system(f'cd {dir_path}')
         os.system(f'mpirun -np 56 lmp -in in.TO_300K')
+        os.system('conda deactivate')
