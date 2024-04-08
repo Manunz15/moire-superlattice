@@ -18,7 +18,7 @@ class Path:
 
     def create(self, path: str) -> None:
         if not os.path.isdir(path):
-            os.mkdir(path)
+            os.makedirs(path)
 
     def create_dir(self, dir: str, files: list[str] = []) -> None:
         # create path
