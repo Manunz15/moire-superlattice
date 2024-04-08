@@ -22,11 +22,13 @@ class Path:
 
     def create_dir(self, dir: str, files: list[str] = []) -> None:
         # create path
-        path = self.join([self.path, dir])
-        self.create(path)
+        dir_path = self.join([self.path, dir])
+        self.create(dir_path)
 
         # copy files
         for file in files:
             filename = file.split('/')[-1]
-            final_path = self.join([path, filename])
+            final_path = self.join([dir_path, filename])
             shutil.copy2(file, final_path)
+
+        return dir_path

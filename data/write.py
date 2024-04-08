@@ -6,14 +6,14 @@ class WriteAtoms:
     def __init__(self):
         pass
 
-    def write(self, DF: pd.DataFrame, elements: dict, filename: str, box: list[tuple[float]], title: str = 'a comment'):
+    def write(self, DF: pd.DataFrame, atoms: dict, filename: str, box: list[tuple[float]], title: str = 'a comment'):
         f = open(filename, 'w')
 
         # initial comment
         f.write(f'# {title}\n\n')
 
         # number of atoms
-        f.write(f'{len(DF)} atoms\n{len(elements)} atom types\n\n')
+        f.write(f'{len(DF)} atoms\n{len(atoms)} atom types\n\n')
 
         # box dimensions
         x, y, z = box
@@ -24,8 +24,8 @@ class WriteAtoms:
         # masses
         f.write('\nMasses\n\n')
 
-        for element in elements:
-            f.write(f'{elements[element]["id"]} {elements[element]["mass"]} # {element}\n')
+        for atom in atoms:
+            f.write(f'{atoms[atom]["id"]} {atoms[atom]["mass"]} # {atom}\n')
 
         # atoms
         f.write('\nAtoms\n\n')
