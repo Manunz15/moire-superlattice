@@ -10,7 +10,6 @@ from utils.path import Path
 from utils.today import today
 
 import numpy as np
-import os
 
 # initialization
 lattice = 'graphene'
@@ -23,32 +22,32 @@ step = lattices[lattice]['step']
 atoms = lattices[lattice]['atoms']
 square_width, height = 12, 21
 
-# methods
-ANGLES = [0, 10]
-SHAPES = [(4, 6), (5, 6)]
+# create folders
+def create_simulations(SHAPES, ANGLES):
+    for shape in SHAPES:
+        # create new path
+        print(f'{shape[0]}x{shape[1]}')
+        new_path = Path(dir = path.path, path = [f'{lattice}{shape[0]}x{shape[1]}'])
+        
+        # create first layer
+        hex_DF = HexLattice().create(step = step, dim = shape)
 
-# ANGLES = np.concatenate((np.arange(0, 2, 0.1), np.arange(2, 10), np.arange(10, 50, 5)))
-# SHAPES = [(width, height) for width in range(square_width, height)]
+        for angle in ANGLES:
+            # create dir
+            dir_path = new_path.create_dir(dir = f'Angle{angle:.1f}', files = files)
+            path_to_save = '/'.join([dir_path, 'atoms.dat'])
 
-for shape in SHAPES:
-    # create new path
-    print(f'{shape[0]}x{shape[1]}')
-    new_path = Path(dir = path.path, path = [f'{lattice}{shape[0]}x{shape[1]}'])
-    
-    # create first layer
-    hex_DF = HexLattice().create(step = step, dim = shape)
+            # create second layer
+            DF = add_second_layer(hex_DF, angle = angle, trasl = [0, 0, 3.3])
+            box = create_box(DF, delta = [2, 2, 1000])
 
-    for angle in ANGLES:
-        # create dir
-        dir_path = new_path.create_dir(dir = f'Angle{angle:.1f}', files = files)
-        path_to_save = '/'.join([dir_path, 'atoms.dat'])
+            # save atoms
+            WriteAtoms().write(DF = DF, atoms = atoms, filename = path_to_save, 
+                            title = f'Lorenzo Manunza {today()}', box = box)
 
-        # create second layer
-        DF = add_second_layer(hex_DF, angle = angle, trasl = [0, 0, 3.3])
-        box = create_box(DF, delta = [2, 2, 1000])
+if __name__ == '__main__':
+    # methods
+    ANGLES = np.concatenate((np.arange(0, 2, 0.1), np.arange(2, 10), np.arange(10, 50, 5)))
+    SHAPES = [(width, height) for width in range(square_width, height)]
 
-        # save atoms
-        WriteAtoms().write(DF = DF, atoms = atoms, filename = path_to_save, 
-                           title = f'Lorenzo Manunza {today()}', box = box)
-
-        # PlotCrystal().plot_2d([DF])
+    create_simulations(SHAPES, ANGLES)
