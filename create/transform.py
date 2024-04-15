@@ -20,6 +20,19 @@ class Transform:
         rotated_vect = np.matmul(vect, rot)
                 
         return rotated_vect
+    
+    def permutation(self, DF:pd.DataFrame, perm: dict[int]):
+        DF = DF.copy()
+        types = self.to_array(DF, keys = ['type'])
+        inverted = types.copy()
+
+        for first, second in perm.items():
+            inverted[types == first] = second
+            inverted[types == second] = first
+
+        DF['type'] = inverted
+        
+        return DF
 
     def translation(self, DF: pd.DataFrame, trasl: np.array):
         # translate all atoms

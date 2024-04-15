@@ -6,7 +6,7 @@ lattices = {
         'step': 1.42,
         'z_step': 3.3,
         'atom_types': 1,
-        'atoms': {'C': {'id': 1, 'mass': 12.011}}
+        'atoms': {'C': {'id': 1, 'mass': 12.011}},
     },
 
     'h-BN': False}

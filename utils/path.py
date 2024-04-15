@@ -19,6 +19,13 @@ class Path:
     def create(self, path: str) -> None:
         if not os.path.isdir(path):
             os.makedirs(path)
+        
+    def copy(self, files: list, in_path: str = None):
+        for file in files:
+            if in_path:
+                shutil.copy2(file, in_path)
+            else:
+                shutil.copy2(file, self.path)
 
     def create_dir(self, dir: str, files: list[str] = []) -> None:
         # create path
@@ -26,9 +33,6 @@ class Path:
         self.create(dir_path)
 
         # copy files
-        for file in files:
-            filename = file.split('/')[-1]
-            final_path = self.join([dir_path, filename])
-            shutil.copy2(file, final_path)
+        self.copy(files = files, in_path = dir_path)
 
         return dir_path

@@ -1,7 +1,9 @@
 #!/bin/bash/
 
+# Lorenzo Manunza, Università degli Studi di Cagliari, April 2024
+
 # paths
-path="../simulations/graphene/best_method/*/"
+path="../../simulations/graphene/best_method/*/"
 base=$(pwd)
 
 # iterating in folders

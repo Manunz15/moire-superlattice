@@ -57,7 +57,7 @@ class PlotCrystal:
     def plot_2d(self, DFs: list[pd.DataFrame], angle: float = None):
         self.plot(DFs = DFs, ax = plt, angle = angle)
 
-    def plot_3d(self, DFs: list[pd.DataFrame]):
+    def plot_3d(self, DFs: list[pd.DataFrame], angle: float = None):
         fig = plt.figure()
         ax = fig.add_subplot(projection = '3d')
-        self.plot(DFs = DFs, ax = ax)
+        self.plot(DFs = DFs, ax = ax, angle = angle)
