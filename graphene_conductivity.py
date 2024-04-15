@@ -23,10 +23,10 @@ DF = add_second_layer(DF, angle = angle, trasl = [0, 0, 3.3])
 box = create_box(DF, delta = [step, step, 2000])
 # PlotCrystal().plot_2d([DF])
 
-changes = {'x_1i': round(box[0][0], 3),
-           'x_1f': round((box[0][1] - box[0][0]) / 2, 3),
-           'x_2i': round((box[0][1] - box[0][0]) / 2 + 0.1, 3),
-           'x_2f': round(box[0][1], 3)}
+changes = {'x_1i': box[0][0],
+           'x_1f': (box[0][1] - box[0][0]) / 2,
+           'x_2i': (box[0][1] - box[0][0]) / 2 + 0.1,
+           'x_2f': box[0][1]}
 
 # save
 path = Path(path = [lattice, dir_name])
