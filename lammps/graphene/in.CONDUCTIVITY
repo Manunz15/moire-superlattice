@@ -56,13 +56,13 @@ unfix   NPT
 # HEATING LEFT
 #--------------
 fix     HEATING1 left nvt temp 200 200 1
-run     100000
+run     50000
 unfix   HEATING1
 
 # HEATING RIGHT
 #--------------
 fix     HEATING2 right nvt temp 100 100 1
-run     100000
+run     50000
 unfix   HEATING2
 
 # EQUILIBRATION
