@@ -37,7 +37,7 @@ for angle in ANGLES:
             'x_2f': round(box[0][1], 3)}
 
     # save
-    path = Path(path = [lattice, dir_name, f'Angle{angle:.1f}'])
+    path = Path(path = [lattice, dir_name, f'Angle{angle:.2f}'])
     path.copy(files = files)
     modify_file(filename = '/'.join([path.path,'in.CONDUCTIVITY']), changes = changes)
     WriteAtoms().write(DF = DF, atoms = atoms, filename = f'../simulations/graphene/{dir_name}/Angle{angle:.2f}/atoms.dat', 
