@@ -6,7 +6,7 @@ from create.box import create_box
 from data.write import WriteAtoms
 from data.plot import PlotCrystal
 from utils.today import today
-from utils.modify_file import modify_file
+from utils.file import File
 from utils.path import Path
 from utils.materials import*
 
@@ -15,7 +15,7 @@ import numpy as np
 lattice = 'graphene'
 dir_name = 'conductivity_double_layer'
 angle = 1.1
-files = ['/'.join(['lammps', lattice, 'CH.airebo']),
+filenames = ['/'.join(['lammps', lattice, 'CH.airebo']),
          '/'.join(['lammps', lattice, 'in.CONDUCTIVITY'])]
 
 # properties
@@ -31,14 +31,14 @@ for angle in ANGLES:
     box = create_box(DF, delta = [step, step, 2000])
     # PlotCrystal().plot_2d([DF])
 
-    changes = {'x_1i': round(box[0][0], 3),
+    replacements = {'x_1i': round(box[0][0], 3),
             'x_1f': round((box[0][1] - box[0][0]) / 2, 3),
             'x_2i': round((box[0][1] - box[0][0]) / 2 + 0.1, 3),
             'x_2f': round(box[0][1], 3)}
 
     # save
     path = Path(path = [lattice, dir_name, f'Angle{angle:.1f}'])
-    path.copy(files = files)
-    modify_file(filename = '/'.join([path.path,'in.CONDUCTIVITY']), changes = changes)
+    path.copy(filenames = filenames)
+    File().replace(filename = '/'.join([path.path,'in.CONDUCTIVITY']), replacements = replacements)
     WriteAtoms().write(DF = DF, atoms = atoms, filename = f'../simulations/graphene/{dir_name}/Angle{angle:.1f}/atoms.dat', 
                 title = f'Lorenzo Manunza {today()}', box = box)

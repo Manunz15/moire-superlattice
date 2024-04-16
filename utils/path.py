@@ -1,7 +1,7 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, April 2024
 
+from utils.file import File
 import os
-import shutil
 
 class Path:
     def __init__(self, dir: str = '../simulations', path: list[str] = []):
@@ -20,19 +20,19 @@ class Path:
         if not os.path.isdir(path):
             os.makedirs(path)
         
-    def copy(self, files: list, in_path: str = None):
-        for file in files:
+    def copy(self, filenames: list, in_path: str = None):
+        for filename in filenames:
             if in_path:
-                shutil.copy2(file, in_path)
+                File().copy(filename, in_path)
             else:
-                shutil.copy2(file, self.path)
+                File().copy(filename, self.path)
 
-    def create_dir(self, dir: str, files: list[str] = []) -> None:
+    def create_dir(self, dir: str, filenames: list[str] = []) -> None:
         # create path
         dir_path = self.join([self.path, dir])
         self.create(dir_path)
 
         # copy files
-        self.copy(files = files, in_path = dir_path)
+        self.copy(filenames = filenames, in_path = dir_path)
 
         return dir_path

@@ -68,5 +68,5 @@ unfix   HEATING2
 # EQUILIBRATION
 #--------------
 fix     EQUI all nve
-run     100000
+run     50000
 unfix   EQUI
