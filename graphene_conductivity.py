@@ -13,7 +13,7 @@ from utils.materials import*
 import numpy as np
 
 lattice = 'graphene'
-dir_name = 'conductivity'
+dir_name = 'conductivity_shapes'
 filenames = ['/'.join(['lammps', lattice, 'CH.airebo']),
          '/'.join(['lammps', lattice, 'in.CONDUCTIVITY'])]
 
@@ -21,18 +21,26 @@ filenames = ['/'.join(['lammps', lattice, 'CH.airebo']),
 step = lattices[lattice]['step']
 atoms = lattices[lattice]['atoms']
 
-DF = HexLattice().create(step = step, dim = (121, 105), atom_types = 1)
-box = create_box(DF, delta = [step, step, 2000])
-PlotCrystal().plot_2d([DF])
+# width = 121
+height = 105
 
-replacements = {'x_1i': round(box[0][0], 3),
-        'x_1f': round((box[0][1] - box[0][0]) / 2, 3),
-        'x_2i': round((box[0][1] - box[0][0]) / 2 + 0.1, 3),
-        'x_2f': round(box[0][1], 3)}
+# DIMS = (width, height)
+DIMS = [(width, height) for width in range(80, 200, 5)]
 
-# save
-path = Path(path = [lattice, dir_name])
-path.copy(filenames = filenames)
-File().replace(filename = '/'.join([path.path,'in.CONDUCTIVITY']), replacements = replacements)
-WriteAtoms().write(DF = DF, atoms = atoms, filename = f'../simulations/{lattice}/{dir_name}/atoms.dat', 
-            title = f'Lorenzo Manunza {today()}', box = box)
+for dim in DIMS:
+        DF = HexLattice().create(step = step, dim = dim, atom_types = 1)
+        box = create_box(DF, delta = [step, step, 2000])
+        # PlotCrystal().plot_2d([DF])
+
+        replacements = {'x_1i': round(box[0][0], 3),
+                'x_1f': round((box[0][1] - box[0][0]) / 2, 3),
+                'x_2i': round((box[0][1] - box[0][0]) / 2 + 0.1, 3),
+                'x_2f': round(box[0][1], 3)}
+
+        # save
+        path = Path(path = [lattice, dir_name, f'width_{dim[0]}'])
+        print(path.path)
+        path.copy(filenames = filenames)
+        File().replace(filename = '/'.join([path.path,'in.CONDUCTIVITY']), replacements = replacements)
+        WriteAtoms().write(DF = DF, atoms = atoms, filename = f'{path.path}/atoms.dat', 
+                title = f'Lorenzo Manunza {today()}', box = box)

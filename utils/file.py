@@ -20,7 +20,7 @@ class File:
 
     def replace(self, filename: str, replacements: dict[str] = {}) -> None:
         """
-        REPLACE
+        REPLACE IN FILES
         -------------------------------------------------------------------------
         Function for replacing strings in a file with others. 
 
