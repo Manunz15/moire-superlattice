@@ -3,7 +3,7 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, April 2024
 
 # paths
-path="../../simulations/graphene/conductivity_double_layer/*/"
+path="../../simulations/graphene/dir_name/*/"
 base=$(pwd)
 
 # iterating in folders
