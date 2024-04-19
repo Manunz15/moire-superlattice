@@ -24,4 +24,4 @@ height = 105
 dir_name = 'conductivity_final'
 DIMS = [(width, height) for width in range(80, 160, 10)]
 ANGLES = [0.0, 0.5, 1.0, 1.05, 1.1, 1.15, 1.2, 1.5]
-CreateAll(lattice, filenames).create_all(dir_name, DIMS, ANGLES)
+CreateAll(lattice, filenames, dir_name, DIMS, ANGLES)

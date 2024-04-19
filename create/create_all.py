@@ -13,7 +13,7 @@ from utils.materials import lattices
 import pandas as pd
 
 class CreateAll:
-    def __init__(self, lattice: str, filenames: list[str]) -> None:
+    def __init__(self, lattice: str, filenames: list[str], dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, *, plot: bool = False) -> None:
         # properties
         self.lattice = lattice
         self.step = lattices[lattice]['step']
@@ -23,7 +23,10 @@ class CreateAll:
         # settings
         self.filenames = filenames
 
-    def create_all(self, dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, *, plot: bool = False) -> None:
+        # create all
+        self.create_all(dir_name = dir_name, DIMS = DIMS, ANGLES = ANGLES, plot = plot)
+
+    def create_all(self, dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, plot: bool = False) -> None:
         # iterate for shape
         for dim in DIMS:
             DF = HexLattice().create(step = self.step, dim = dim, atom_types = 1)
@@ -33,7 +36,7 @@ class CreateAll:
             if ANGLES:
                 for angle in ANGLES:
                     rot_DF = add_second_layer(DF, angle = angle, trasl = [0, 0, self.z_step])
-                    angle_dir = '' if len(ANGLES) == 1 else f'angle_{angle:.1f}'
+                    angle_dir = '' if len(ANGLES) == 1 else f'angle_{angle:.2f}'
                     path = '/'.join([dir_name, angle_dir, dim_dir])
                     self.save(rot_DF, path, plot)
             
