@@ -17,9 +17,21 @@ The graphs display:
 """
 
 class PlotCrystal:
-    def __init__(self):
+    def __init__(self, DFs: list[pd.DataFrame], project: str = '2d'):
         # for ordinal numbers: 1 -> 1st
         self.p = inflect.engine()
+
+        # to list
+        if type(DFs) != list:
+            DFs = [DFs]
+
+        # plot
+        if project == '2d':
+            self.plot_2d(DFs = DFs)
+        elif project == '3d':
+            self.plot_3d(DFs = DFs)
+        else:
+            raise Warning(f"<project> must be '2d' or '3d', not '{project}'.")
 
     def plot(self, DFs: list[pd.DataFrame], ax, angle: float):
         # number of plotted atoms 

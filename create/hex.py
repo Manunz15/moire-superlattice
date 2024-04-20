@@ -4,11 +4,11 @@ import numpy as np
 import pandas as pd
 
 class HexLattice:
-    def __init__(self):
-        self.angle = np.deg2rad(60)
-        self.columns = ['x', 'y']
+    def __init__(self, step: float = 1, dim: tuple = (1, 1), atom_types: int = 1) -> None:
+        self.angle: float = np.deg2rad(60)
+        self.columns: list[str] = ['x', 'y']
     
-    def create(self, step: float = 1, dim: tuple = (1, 1), atom_types: int = 1):
+    def create(self, step: float = 1, dim: tuple = (1, 1), atom_types: int = 1) -> pd.DataFrame:
         rows, cols = dim
 
         # types of atoms
@@ -60,6 +60,3 @@ class HexLattice:
 
         return DF
 
-if __name__ == '__main__':
-    hex = HexLattice()
-    hex_DF = hex.create(step = 2.1, num_atoms = 1200, dim = (15, 21))

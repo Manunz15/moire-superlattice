@@ -10,7 +10,7 @@ base=$(pwd)
 for dir in $path
 do  
     # iterating in sub-folders
-    for sub_dir in "${dir}*/"
+    for sub_dir in "${dir}"*/
     do
         # running
         cd $sub_dir

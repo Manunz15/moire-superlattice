@@ -16,9 +16,9 @@ class CreateAll:
     def __init__(self, lattice: str, filenames: list[str], dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, *, plot: bool = False) -> None:
         # properties
         self.lattice = lattice
-        self.step = lattices[lattice]['step']
-        self.z_step = lattices[lattice]['z_step']
-        self.atoms = lattices[lattice]['atoms']
+        self.step: float = lattices[lattice]['step']
+        self.z_step: float = lattices[lattice]['z_step']
+        self.atoms: dict = lattices[lattice]['atoms']
 
         # settings
         self.filenames = filenames
@@ -63,4 +63,4 @@ class CreateAll:
         
         # plot
         if plot:
-            PlotCrystal().plot_2d([DF])
+            PlotCrystal(DF)
