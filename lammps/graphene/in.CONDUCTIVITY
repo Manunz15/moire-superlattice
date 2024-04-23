@@ -37,10 +37,13 @@ compute tL left temp
 compute tR right temp
 variable deltaT equal c_tL-c_tR
 
+compute atomsL left atoms
+compute atomsR right atoms
+
 # OUTPUTS
 #--------
 thermo  100
-thermo_style custom step atoms temp c_tL c_tR v_deltaT etotal
+thermo_style custom step atoms c_atomsL c_atomsR temp c_tL c_tR v_deltaT etotal
 dump    1 all custom 5000 md.lammpstrj id x y z vx vy vz
 
 # MINIMIZATION
@@ -73,7 +76,7 @@ write_dump all custom backup.atoms id type x y z vx vy vz
 #------------
 log log.nve
 thermo  1
-thermo_style custom step atoms temp c_tL c_tR v_deltaT etotal
+thermo_style custom step atoms c_atomsL c_atomsR temp c_tL c_tR v_deltaT etotal
 
 # EQUILIBRATION
 #--------------
