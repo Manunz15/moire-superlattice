@@ -21,7 +21,7 @@ pair_coeff * * CH.airebo C            # airebo
 # PARAMETERS
 #-----------
 timestep        0.001
-velocity        all create 150.0 42 dist gaussian
+velocity        all create 300.0 42 dist gaussian
 
 # REGIONS
 #--------
@@ -49,19 +49,19 @@ minimize 1.0e-10 1.0e-10 10000 10000
 
 # NPT
 #----
-fix     NPT all npt temp 150 150 1 iso 0 0 100
+fix     NPT all npt temp 300 300 1 iso 0 0 100
 run     10000
 unfix   NPT
 
 # HEATING LEFT
 #--------------
-fix     HEATING1 left nvt temp 200 200 1
+fix     HEATING1 left nvt temp 350 350 1
 run     50000
 unfix   HEATING1
 
 # HEATING RIGHT
 #--------------
-fix     HEATING2 right nvt temp 100 100 1
+fix     HEATING2 right nvt temp 250 250 1
 run     50000
 unfix   HEATING2
 
