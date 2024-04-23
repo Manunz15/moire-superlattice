@@ -10,4 +10,4 @@ lattice = 'graphene'
 # ANGLES = [0.0, 0.5, 1.0, 1.05, 1.1, 1.15, 1.2, 1.5]
 # create_all(lattice = lattice, DIMS = DIMS, ANGLES = ANGLES, dir_name = dir_name, lammps = 'in.CONDUCTIVITY')
 
-create_all(lattice = lattice, DIMS = (5, 10), dir_name = 'test_conductivity', plot = True)
+create_all(lattice = lattice, DIMS = (120, 100), dir_name = 'test_conductivity')

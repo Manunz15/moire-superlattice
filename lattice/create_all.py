@@ -35,7 +35,12 @@ def create_all(lattice: str, DIMS: list[tuple], ANGLES: list[float] = None, dir_
     # iterate for shape
     for dim in DIMS:
         lt = HexLattice(lattice = lattice, dim = dim)
-        dim_dir = '' if len(DIMS) == 1 else f'dim_{dim[0]}x{dim[1]}'
+        
+        if len(DIMS) == 1:
+            dim_dir = ''
+            dir_name = f'{dir_name}_{dim[0]}x{dim[1]}'
+        else:
+            dim_dir = f'dim_{dim[0]}x{dim[1]}'
         
         # if angles are specified
         if ANGLES:
