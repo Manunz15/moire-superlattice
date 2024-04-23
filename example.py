@@ -1,3 +1,5 @@
+# Lorenzo Manunza, Università degli Studi di Cagliari, April 2024
+
 from lattice import HexLattice, add_layers
 
 # dim and angle

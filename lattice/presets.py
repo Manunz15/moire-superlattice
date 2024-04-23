@@ -11,7 +11,7 @@ lattices = {
     },
     # source: place holder
     'h-BN': {
-        'potential': 'place holder',
+        'potential': 'BNC.tersoff',
         'step': 1.446,
         'z_step': 3.33,
         'atom_types': {'B': {'id': 1, 'mass': 10.811},

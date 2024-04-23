@@ -4,9 +4,6 @@ from lattice import create_all
 
 lattice = 'graphene'
 
-# single layer
-create_all(lattice = lattice, DIMS = (120, 100), dir_name = 'conductivity_test')
-
 # different shapes
 height = 105
 DIMS = [(width, height) for width in range(80, 205, 5)]

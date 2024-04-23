@@ -1,14 +1,42 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, April 2024
 
-from utils.file import File
 import os
+from utils.file import copy_file
 
 class Path:
-    def __init__(self, dir: str = '../simulations', path: list[str] = []):
+    def __init__(self, initial_path: str = '../simulations', path: list[str] = []) -> None:
+        """
+        PATH CLASS
+        -------------------------------------------------------------------------
+        Class for creating a main path with sub-directories, eventually filled 
+        with files. 
+
+        Parameters
+        ----------
+        initial_path : string. Starting point, for our purposes is useful to
+            initialized it as '../simulations'.
+
+        path : list of strings. The list of directories to follow from the 
+            initial path. 
+
+        For example path = ['graphene', 'test'] will create the folder 
+        '../simulation/graphene/test'.
+
+        Properties
+        ----------
+
+        Methods
+        -------
+        join -> None. 
+        create -> None.
+        copy -> None.
+        create_dir -> None.
+        """
+
         # initialization
-        path.insert(0, dir)
+        path.insert(0, initial_path)
         self.path = self.join(path)
-        self.create(self.path)
+        self.create_dir(self.path)
 
     def __str__(self) -> str:
         return self.path
@@ -16,21 +44,21 @@ class Path:
     def join(self, path: list[str]) -> str:
         return '/'.join(path)
 
-    def create(self, path: str) -> None:
+    def create_dir(self, path: str) -> None:
         if not os.path.isdir(path):
             os.makedirs(path)
         
-    def copy(self, filenames: list, in_path: str = None):
+    def copy(self, filenames: list, in_path: str = None) -> None:
         for filename in filenames:
             if in_path:
-                File().copy(filename, in_path)
+                copy_file(filename, in_path)
             else:
-                File().copy(filename, self.path)
+                copy_file(filename, self.path)
 
-    def create_dir(self, dir: str, filenames: list[str] = []) -> None:
+    def initialize_dir(self, dir: str, filenames: list[str] = []) -> None:
         # create path
         dir_path = self.join([self.path, dir])
-        self.create(dir_path)
+        self.create_dir(dir_path)
 
         # copy files
         self.copy(filenames = filenames, in_path = dir_path)
