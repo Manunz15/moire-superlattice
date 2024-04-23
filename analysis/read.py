@@ -98,11 +98,3 @@ class ReadData:
                     var_line = True
 
         return np.array(DATA)
-    
-if __name__ == '__main__':
-    start_time = time.time()
-    print(ReadData().read_trj('simulations/create_graphene/md.lammpstrj'))
-    # print(ReadData().read_log('code/log.liquid', variables = ['TotEng']))
-    end_time = time.time()
-    
-    print(f'{end_time - start_time : .2f} seconds')

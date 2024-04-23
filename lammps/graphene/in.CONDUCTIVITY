@@ -65,8 +65,22 @@ fix     HEATING2 right nvt temp 100 100 1
 run     50000
 unfix   HEATING2
 
+# BACKUP
+#-------
+write_dump all custom backup.atoms id type x y z vx vy vz
+
+# NEW OUTPUTS
+#------------
+log log.nve
+thermo  1
+thermo_style custom step atoms temp c_tL c_tR v_deltaT etotal
+
 # EQUILIBRATION
 #--------------
 fix     EQUI all nve
 run     50000
 unfix   EQUI
+
+# FINAL ATOMS
+#------------
+write_dump all custom final.atoms id type x y z vx vy vz
