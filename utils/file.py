@@ -17,7 +17,7 @@ def copy_file(filename: str, path: str) -> None:
     
     shutil.copy2(filename, path)
 
-def replace(filename: str, replacements: dict[str, str] = {}) -> None:
+def replace(filename: str, replacements: dict[str, str], final_filename: str = None) -> None:
     """
     REPLACE IN FILE
     -------------------------------------------------------------------------
@@ -35,7 +35,12 @@ def replace(filename: str, replacements: dict[str, str] = {}) -> None:
         For example, with replacements = {'hello': 'hola', '15': '42'} 
         every occurrence of 'hello' in the file will be replaced with 'hola', 
         and every occurrence '15' will be replaced with '42'.
+    
+    final_filename: string. The name that the modified file will have. If not
+        specified, the original file will be overwritten.
     """
+    if final_filename is None:
+        final_filename = filename
  
     # open file
     with open(filename, 'r') as f:
@@ -48,6 +53,32 @@ def replace(filename: str, replacements: dict[str, str] = {}) -> None:
                 line = line.replace(str(old), str(new))
                 lines[index] = line
 
-    # overwrite file
-    with open(filename, 'w') as f:
+    # save file
+    with open(final_filename, 'w') as f:
         f.writelines(lines) 
+
+def remove(filename: str, start_where: str, final_filename: str = None) -> None:
+    '''
+    REMOVE LINES
+    -------------------------------------------------------------------------
+    '''
+    # initialization
+    save = False
+    new_lines = []
+    if final_filename is None:
+        final_filename = filename
+
+    # open file
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+
+    # save lines
+    for line in lines:
+        if start_where in line:
+            save = True
+        if save:
+            new_lines.append(line)
+
+    # save file
+    with open(final_filename, 'w') as f:
+        f.writelines(new_lines) 

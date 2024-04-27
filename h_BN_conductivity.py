@@ -1,9 +1,16 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, April 2024
 
-from lattice import create_all
+from utils import create_all
 
-# dim and angle
-dim: tuple = (12, 20)
+lattice = 'h-BN'
 
-# create and plot
-create_all(lattice = 'h-BN', dir_name = 'test', DIMS = dim, lammps = 'in.TO_300K', plot = True)
+# different shapes
+height = 100
+DIMS = [(width, height) for width in range(80, 200 + 1, 20)]
+create_all(lattice = lattice, DIMS = DIMS, dir_name = 'conductivity_shapes')
+
+# two layers
+height = 100
+DIMS = [(width, height) for width in range(60, 160, 20)]
+ANGLES = [angle / 100 for angle in range(100, 120 + 1)]
+create_all(lattice = lattice, DIMS = DIMS, ANGLES = ANGLES, dir_name = 'conductivity_angles')

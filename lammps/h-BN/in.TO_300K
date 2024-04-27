@@ -18,7 +18,6 @@ read_data       atoms.dat
 pair_style      tersoff
 pair_coeff  * * BNC.tersoff B N
 
-
 # PARAMETERS
 #-----------
 timestep        0.001 
@@ -27,7 +26,7 @@ timestep        0.001
 #--------
 thermo  100
 thermo_style custom step atoms temp etotal
-dump    1 all custom 100 md.lammpstrj id x y z vx vy vz
+dump    1 all custom 100 md.lammpstrj id type x y z vx vy vz
 
 # MINIMIZATION
 #-------------

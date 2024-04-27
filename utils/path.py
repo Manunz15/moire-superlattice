@@ -4,7 +4,7 @@ import os
 from utils.file import copy_file
 
 class Path:
-    def __init__(self, initial_path: str = '../simulations', path: list[str] = []) -> None:
+    def __init__(self, initial_path: str = '../simulations', path: list[str] = None) -> None:
         """
         PATH CLASS
         -------------------------------------------------------------------------
@@ -34,6 +34,9 @@ class Path:
         """
 
         # initialization
+        if path is None:
+            path = []
+
         path.insert(0, initial_path)
         self.path = self.join(path)
         self.create_dir(self.path)
@@ -55,12 +58,13 @@ class Path:
             else:
                 copy_file(filename, self.path)
 
-    def initialize_dir(self, dir: str, filenames: list[str] = []) -> None:
+    def initialize_dir(self, dir: str, filenames: list[str] = None) -> None:
         # create path
         dir_path = self.join([self.path, dir])
         self.create_dir(dir_path)
 
         # copy files
-        self.copy(filenames = filenames, in_path = dir_path)
+        if filenames:
+            self.copy(filenames = filenames, in_path = dir_path)
 
         return dir_path

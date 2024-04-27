@@ -7,7 +7,7 @@ from lattice.add_layers import add_layers
 from utils.file import replace
 from utils.path import Path
 
-def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: bool) -> None:
+def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: str) -> None:
     # box
     replacements = {'x_1i': round(lattice.box[0][0], 3),
             'x_1f': round((lattice.box[0][1] - lattice.box[0][0]) / 2, 3),
@@ -22,9 +22,9 @@ def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: 
     
     # plot
     if plot:
-        lattice.plot()
+        lattice.plot(projection = plot)
 
-def create_all(lattice: str, DIMS: list[tuple], ANGLES: list[float] = None, dir_name: str = '', lammps: str = 'in.CONDUCTIVITY', plot: bool = False) -> None:
+def create_all(lattice: str, DIMS: list[tuple], ANGLES: list[float] = None, dir_name: str = '', lammps: str = 'in.CONDUCTIVITY', plot: str = None) -> None:
     # files to copy
     filenames = ['/'.join(['lammps', lattice, lattices[lattice]['potential']]),
          '/'.join(['lammps', lattice, lammps])]
