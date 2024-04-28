@@ -13,7 +13,7 @@ lattices = {
     'h-BN': {
         'potential': 'BNC.tersoff',
         'step': 1.446,
-        'z_step': 3.33,
+        'z_step': 3.335,
         'atom_types': {'B': {'id': 1, 'mass': 10.811},
                        'N': {'id': 2, 'mass': 14.0067}},
         'to_interchange': True

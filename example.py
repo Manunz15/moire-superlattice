@@ -8,5 +8,5 @@ angle: float = 1.1
 
 # create and plot
 graphene = HexLattice('graphene', dim = dim)
-# double_graphene = add_layers(graphene, angle = angle)
-graphene.plot()
+double_graphene = add_layers(graphene, angle = angle)
+double_graphene.plot()

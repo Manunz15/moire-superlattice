@@ -1,5 +1,6 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, April 2024
 
+import numpy as np
 import pandas as pd
 
 from lattice.atomsplot import AtomsPlot
@@ -20,7 +21,7 @@ class Lattice:
             self.z_step: float = lattices[lattice]['z_step']
             self.atom_types: dict[str, dict] = lattices[lattice]['atom_types']
             self.to_interchange: bool = lattices[lattice]['to_interchange']
-            self.box_pad = [self.step, self.step, 1e4]
+            self.box_pad = [self.step, self.step * np.sin(np.pi / 3), 1e4]
         else:
             raise NameError(f"'{lattice}' is not a defined lattice, please change lattice or add data for '{lattice}' in <presets.py>.")
         
