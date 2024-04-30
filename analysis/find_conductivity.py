@@ -4,12 +4,11 @@ import numpy as np
 import pandas as pd
 from scipy.optimize import curve_fit
 from typing import Any
-import os
 
 from analysis.setting import K_B
 
 def sum_exp(n: int = 1) -> Any:
-    def curve(X, a, tau):
+    def curve(X, a, tau) -> float:
         func = 0
         for m in range(n):
             k = (2 * m + 1)**2

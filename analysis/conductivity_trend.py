@@ -1,7 +1,7 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, April 2024
 
 from analysis.read import read_log
-from analysis.conductivity import find_conductivity
+from analysis.find_conductivity import find_conductivity
 from analysis.plot import plot_fit, plot_extracted
 from scipy.optimize import curve_fit
 
@@ -11,7 +11,7 @@ import numpy as np
 def rect(X, a, b):
     return a * X + b
 
-def extract_conductivity(path: str, div: float = 0.6, p0 = [1, 1], plot_final: bool = False, plot_every: bool = False) -> float:
+def extract_conductivity(path: str, threshold: float = 0.6, p0 = [1, 1], plot_final: bool = False, plot_every: bool = False) -> float:
     # initialization
     k_list: list[float] = []
     L_list: list[float] = []
@@ -23,7 +23,7 @@ def extract_conductivity(path: str, div: float = 0.6, p0 = [1, 1], plot_final: b
         data = read_log(filename)
 
         # data
-        n = data.index[data['v_deltaT'] > div * data['v_deltaT'].max()].to_numpy()[-1]
+        n = data.index[data['v_deltaT'] > threshold * data['v_deltaT'].max()].to_numpy()[-1]
         time = data['Step'][:n] * 1e-15
         dT = data['v_deltaT'][:n]
         time = (time - time.min())

@@ -10,8 +10,8 @@ from utils.path import Path
 def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: str) -> None:
     # box
     replacements = {'x_1i': round(lattice.box[0][0], 3),
-            'x_1f': round((lattice.box[0][1] - lattice.box[0][0]) / 2 - 0.05, 3),
-            'x_2i': round((lattice.box[0][1] - lattice.box[0][0]) / 2 + 0.05, 3),
+            'x_1f': round((lattice.box[0][1] + lattice.box[0][0]) / 2 - 0.05, 3),       # - xhi / 2 + xhi
+            'x_2i': round((lattice.box[0][1] + lattice.box[0][0]) / 2 + 0.05, 3),
             'x_2f': round(lattice.box[0][1], 3)}
 
     # save
@@ -24,7 +24,7 @@ def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: 
     if plot:
         lattice.plot(projection = plot)
 
-def create_all(lattice: str, DIMS: list[tuple], ANGLES: list[float] = None, dir_name: str = '', lammps: str = 'in.CONDUCTIVITY', plot: str = None) -> None:
+def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, interchange: bool = False, plot: str = None) -> None:
     # files to copy
     filenames = ['/'.join(['lammps', lattice, lattices[lattice]['potential']]),
          '/'.join(['lammps', lattice, lammps])]
@@ -35,6 +35,8 @@ def create_all(lattice: str, DIMS: list[tuple], ANGLES: list[float] = None, dir_
     # iterate for shape
     for dim in DIMS:
         lt = HexLattice(lattice = lattice, dim = dim)
+        if interchange:
+            lt.interchange()
         
         if len(DIMS) == 1:
             dim_dir = ''

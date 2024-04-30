@@ -57,10 +57,24 @@ def replace(filename: str, replacements: dict[str, str], final_filename: str = N
     with open(final_filename, 'w') as f:
         f.writelines(lines) 
 
-def remove(filename: str, start_where: str, final_filename: str = None) -> None:
+def remove(filename: str, start_key: str, final_filename: str = None) -> None:
     '''
     REMOVE LINES
     -------------------------------------------------------------------------
+    Function for removing lines from a file until a 'start_key' appears.
+
+    Parameters
+    ----------
+    filename : string. The name of the file to edit
+    
+    start_key: string. The new file will start with the line where this string
+        first appear in the original file. For example, if 
+        start_key = 'string' the edited version of this description would
+        start with 'filename: string. The name ect...', the previous lines
+        will be deleted.
+    
+    final_filename: string. The name that the modified file will have. If not
+        specified, the original file will be overwritten.
     '''
     # initialization
     save = False
@@ -74,7 +88,7 @@ def remove(filename: str, start_where: str, final_filename: str = None) -> None:
 
     # save lines
     for line in lines:
-        if start_where in line:
+        if start_key in line:
             save = True
         if save:
             new_lines.append(line)

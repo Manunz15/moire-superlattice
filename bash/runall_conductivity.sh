@@ -3,7 +3,9 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, April 2024
 
 # paths
-path="../../simulations/graphene/dir_name/*/"
+lattice="graphene"
+dir_name="dir_name"
+path="../../simulations/$lattice/$dir_name/*/"
 base=$(pwd)
 
 # iterating in folders

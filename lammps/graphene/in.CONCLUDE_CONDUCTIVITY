@@ -5,7 +5,7 @@
 units           metal
 dimension           3
 processors      * * *
-boundary        p p p
+boundary        s s s
 atom_style      atomic
 
 # ATOMS
@@ -21,49 +21,53 @@ pair_coeff * * CH.airebo C            # airebo
 # PARAMETERS
 #-----------
 timestep        0.001
-velocity        all create 300.0 42 dist gaussian
 
 # REGIONS
 #--------
 region 1 block x_1i x_1f -1000 1000 -1000 1000
 region 2 block x_2i x_2f -1000 1000 -1000 1000
+region 3 block x_3i x_3f -1000 1000 -1000 1000
 
 group left region 1
-group right region 2
+group center region 2
+group right region 3
 
 # COMPUTE
 #--------
 compute tL left temp
+compute tC center temp
 compute tR right temp
-variable deltaT equal c_tL-c_tR
+variable deltaT equal c_tC-(c_tR+c_tL)/2
 
 # OUTPUTS
 #--------
 thermo  100
-thermo_style custom step atoms temp c_tL c_tR v_deltaT etotal
+thermo_style custom step atoms temp c_tL c_tC c_tR v_deltaT etotal
 dump    1 all custom 5000 md.lammpstrj id x y z vx vy vz
 
-# MINIMIZATION
-#-------------
-minimize 1.0e-10 1.0e-10 10000 10000
-
-# NPT
-#----
-fix     NPT all npt temp 300 300 1 iso 0 0 100
+# HEATING
+#--------
+fix     HEATING all nvt temp 300.0 300.0 1
 run     10000
-unfix   NPT
+unfix   HEATING
 
 # HEATING LEFT
-#--------------
-fix     HEATING1 left nvt temp 350 350 1
-run     50000
+#-------------
+fix     HEATING1 left nvt temp 250.0 250.0 1
+run     40000
 unfix   HEATING1
+
+# HEATING CENTER
+#---------------
+fix 	HEATING2 center nvt temp 350.0 350.0 1
+run 	40000
+unfix	HEATING2
 
 # HEATING RIGHT
 #--------------
-fix     HEATING2 right nvt temp 250 250 1
-run     50000
-unfix   HEATING2
+fix     HEATING3 right nvt temp 250.0 250.0 1
+run     40000
+unfix   HEATING3
 
 # BACKUP
 #-------
@@ -73,12 +77,12 @@ write_dump all custom backup.atoms id type x y z vx vy vz
 #------------
 log log.nve
 thermo  1
-thermo_style custom step atoms temp c_tL c_tR v_deltaT etotal
+thermo_style custom step atoms temp c_tL c_tC c_tR v_deltaT etotal
 
 # EQUILIBRATION
 #--------------
 fix     EQUI all nve
-run     50000
+run     25000
 unfix   EQUI
 
 # FINAL ATOMS

@@ -17,6 +17,9 @@ The graphs display:
 
 class AtomsPlot:
     def __init__(self, atoms: pd.DataFrame, name: str = None, projection: str = '2d') -> None:
+        # initialization
+        self.color = {1: '#009bff', 2: '#ff0000', 3: '#2ae700'}
+
         # plot
         if projection == '2d':
             self.plot_2d(atoms = atoms, name = name)
@@ -44,11 +47,11 @@ class AtomsPlot:
 
             # plot 2d
             if ax == plt:
-                ax.scatter(fewer_atoms['x'], fewer_atoms['y'], marker = '.', label = label)
+                ax.scatter(fewer_atoms['x'], fewer_atoms['y'], marker = '.', label = label, c = self.color[int(atom_type)])
 
             # plot 3d
             else:
-                ax.scatter(fewer_atoms['x'], fewer_atoms['y'], fewer_atoms['z'], marker = '.', label = label)
+                ax.scatter(fewer_atoms['x'], fewer_atoms['y'], fewer_atoms['z'], marker = '.', label = label, c = self.color[int(atom_type)])
 
         ax.axis('equal')
         title = f'{name} - {num_atoms} atoms' if name else f'{num_atoms} atoms'
