@@ -3,8 +3,8 @@
 from lattice import HexLattice, add_layers
 
 # dim and angle
-dim: tuple = (12, 20)
-angle: float = 1.1
+dim: tuple = (15, 25)
+angle: float = 11
 
 # create and plot
 graphene = HexLattice('graphene', dim = dim)

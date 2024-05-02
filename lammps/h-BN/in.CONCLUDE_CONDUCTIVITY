@@ -43,7 +43,7 @@ variable deltaT equal c_tC-(c_tR+c_tL)/2
 #--------
 thermo  100
 thermo_style custom step atoms temp c_tL c_tC c_tR v_deltaT etotal
-dump    1 all custom 5000 md.lammpstrj id x y z vx vy vz
+dump    1 all custom 5000 md.lammpstrj id type x y z vx vy vz
 
 # HEATING
 #--------
