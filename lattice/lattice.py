@@ -219,7 +219,6 @@ class Lattice:
 
         # atoms
         f.write('\nAtoms\n\n')
-        # self.atoms = self.atoms.round(5)    # maximum number of digits
         f.write(f'{self.atoms[["id", "type", "x", "y", "z"]].to_string(header = False, index = False, index_names = False)}')
 
         # velocities

@@ -34,12 +34,12 @@ group right region 2
 #--------
 compute tL left temp
 compute tR right temp
-variable deltaT equal c_tR - c_tL
+variable deltaT equal c_tR-c_tL
 
 # OUTPUTS
 #--------
 thermo  100
-thermo_style custom step atoms temp c_tL c_tC c_tR v_deltaT etotal
+thermo_style custom step atoms temp c_tL c_tR v_deltaT etotal
 dump    1 all custom 5000 md.lammpstrj id type x y z vx vy vz
 
 # MINIMIZATION
@@ -72,7 +72,7 @@ write_dump all custom backup.atoms id type x y z vx vy vz
 #------------
 log log.nve
 thermo  1
-thermo_style custom step atoms temp c_tL c_tC c_tR v_deltaT etotal
+thermo_style custom step atoms temp c_tL c_tR v_deltaT etotal
 
 # EQUILIBRATION
 #--------------
