@@ -4,15 +4,15 @@
 
 # paths
 lattice="graphene"
-dir_name="dir_name"
+dir_name="conductivity_angles"
 path="../../simulations/$lattice/$dir_name/*/"
 base=$(pwd)
 
 # iterating in folders
 for dir in $path
 do  
-    # iterating in sub-folders
-    for sub_dir in "${dir}"*/
+    # iterating in sub-folders 
+    for sub_dir in "${dir}"*
     do
         # running
         cd $sub_dir
