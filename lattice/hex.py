@@ -102,7 +102,8 @@ class HexLattice(Lattice):
 
         ATOMS = pd.concat(ATOMS_LIST, ignore_index = True)
         ATOMS.insert(0, 'id', np.arange(1, len(ATOMS) + 1), True)
-        
+        # type to int
+        ATOMS['type'] = ATOMS['type'].to_numpy().astype(int)
+
         self.add(ATOMS)
         self.create_box(pad = [0, 0, 1e4])
-        
