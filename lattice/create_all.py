@@ -24,7 +24,7 @@ def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: 
     if plot:
         lattice.plot(projection = plot)
 
-def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, interchange: bool = False, plot: str = None) -> None:
+def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, double: bool = False, interchange: bool = False, plot: str = None) -> None:
     # files to copy
     filenames = ['/'.join(['lammps', lattice, lattices[lattice]['potential']]),
          '/'.join(['lammps', lattice, lammps])]
@@ -35,8 +35,6 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
     # iterate for shape
     for dim in DIMS:
         lt = HexLattice(lattice = lattice, dim = dim)
-        if interchange:
-            lt.interchange()
         
         if len(DIMS) == 1:
             dim_dir = ''
@@ -47,12 +45,17 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
         # if angles are specified
         if ANGLES:
             for angle in ANGLES:
-                new_lt = add_layers(lattice = lt, angle = angle)
+                lt = HexLattice(lattice = lattice, dim = dim, angle = angle)
                 angle_dir = '' if len(ANGLES) == 1 else f'angle_{angle:.2f}'
-                path = Path(path = [new_lt.lattice, dir_name, angle_dir, dim_dir])
-                save(new_lt, filenames, path, lammps, plot)
-        
+                path = Path(path = [lt.lattice, dir_name, angle_dir, dim_dir])
+                save(lt, filenames, path, lammps, plot)
+                
         # if angles are NOT specified
         else:
+            lt = HexLattice(lattice = lattice, dim = dim)
+            if interchange:
+                lt.interchange()
+            if double:
+                lt = add_layers(lt, angle = 0)
             path = Path(path = [lt.lattice, dir_name, dim_dir])
             save(lt, filenames, path, lammps, plot)

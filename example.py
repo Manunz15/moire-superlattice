@@ -10,4 +10,3 @@ angle: float = 11
 graphene = HexLattice('graphene', dim = dim)
 double_graphene = add_layers(graphene, angle = angle)
 double_graphene.plot()
-# double_graphene.write('atoms.dat')

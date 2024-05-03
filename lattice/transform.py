@@ -37,12 +37,13 @@ class Transform:
         # positions
         pos = self.to_array(df = atoms, keys = self.pos_keys)
         new_pos = self.rotate_vector(vect = pos, angle = angle)
+        atoms[self.pos_keys] = new_pos
         
         # centering
         center_pos = np.mean(pos, axis = 0)
         new_center_pos = np.mean(new_pos, axis = 0)
 
-        atoms[self.pos_keys] = (new_pos + center_pos - new_center_pos) if center else new_pos
+        # atoms[self.pos_keys] = (new_pos + center_pos - new_center_pos) if center else new_pos
 
         # velocities
         try:

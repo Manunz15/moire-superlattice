@@ -5,7 +5,7 @@ import pandas as pd
 from scipy.optimize import curve_fit
 from typing import Any
 
-from analysis.setting import K_B
+from utils.setting import K_B
 
 def sum_exp(n: int = 1) -> Any:
     def curve(X, a, tau) -> float:
