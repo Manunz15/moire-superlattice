@@ -3,7 +3,7 @@
 from lattice import HexLattice, add_layers
 
 # dim and angle
-dim: tuple = (15, 25)
+dim: tuple = (12, 20)
 angle: float = 11
 
 # create and plot
