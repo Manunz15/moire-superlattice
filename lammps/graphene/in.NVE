@@ -15,7 +15,7 @@ read_data       atoms.dat
 
 # POTENTIAL
 #----------
-pair_style      airebo 3.0 0 0
+pair_style      airebo 5.0 0 0
 pair_coeff * * CH.airebo C            # airebo
 
 # PARAMETERS
