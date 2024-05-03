@@ -55,13 +55,13 @@ unfix   HEATING
 # HEATING LEFT
 #-------------
 fix     HEATING1 left nvt temp 250.0 250.0 1
-run     40000
+run     20000
 unfix   HEATING1
 
 # HEATING RIGHT
 #--------------
 fix     HEATING2 right nvt temp 350.0 350.0 1
-run     40000
+run     20000
 unfix   HEATING2
 
 # BACKUP
