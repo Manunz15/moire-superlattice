@@ -1,6 +1,6 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, April 2024
 
-from analysis.read import read_log
+from analysis.read import read_log, read_box
 from analysis.find_conductivity import find_conductivity
 from analysis.plot import plot_fit, plot_extracted
 from scipy.optimize import curve_fit
@@ -11,16 +11,18 @@ import numpy as np
 def rect(X, a, b):
     return a * X + b
 
-def extract_conductivity(path: str, threshold: float = 0.6, p0 = [1, 1], plot_final: bool = False, plot_every: bool = False) -> float:
+def extract_conductivity(path: str, threshold: float = 0.6, p0 = [1, 1], num_layers: int = 2, plot_final: bool = False, plot_every: bool = False) -> float:
     # initialization
     k_list: list[float] = []
     L_list: list[float] = []
     chi2_list: list[float] = []
 
-    for file in os.listdir(path):
+    for dir in os.listdir(path):
         # read data
-        filename = '/'.join([path, file])
-        data = read_log(filename)
+        log_file = os.path.join(path, dir, 'log.lammps')
+        nve_file = os.path.join(path, dir, 'log.nve')
+        data = read_log(nve_file)
+        box = read_box(log_file)
 
         # data
         n = data.index[data['v_deltaT'] > threshold * data['v_deltaT'].max()].to_numpy()[-1]
@@ -29,10 +31,9 @@ def extract_conductivity(path: str, threshold: float = 0.6, p0 = [1, 1], plot_fi
         time = (time - time.min())
 
         # values
-        dim = tuple(map(int, filename[-7:].replace('_', '').split(sep = 'x')))
         atoms_num: int = data['Atoms'][0]
-        L: float = dim[0] * 1.42 * 2 * (1 + np.cos(np.pi / 3))
-        S: float = dim[1] * 1.42 * 2 * np.sin(np.pi / 3) * 3.3
+        L: float = box[0][1] - box[0][0]
+        S: float = box[1][1] - box[1][0] * 3.3 * num_layers
 
         # fit
         k, chi2, pars, covs, time_fit, dT_fit = find_conductivity(time, dT, atoms_num, L, S, p0 = p0)

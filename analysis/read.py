@@ -1,6 +1,19 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, March 2024
 
 import pandas as pd
+import re
+
+def read_box(filename: str) -> list[tuple[float]]:
+    # read file
+    with open(filename, 'r') as f:
+        for line in f:
+            # box line
+            if 'orthogonal box' in line:
+                b = list(map(float, re.findall('[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?', line)))
+                box = [(b[0], b[3]), (b[1], b[4]), (b[2], b[5])]
+                return box
+        else:
+            raise NameError(f'There are not boxes in the file: {filename}')
 
 def read_log(filename: str) -> pd.DataFrame:
     # initialization

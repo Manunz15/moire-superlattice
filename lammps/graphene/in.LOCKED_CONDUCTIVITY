@@ -1,0 +1,97 @@
+# Lorenzo Manunza 12th April 2024
+
+# INITIALIZATION
+#---------------
+units           metal
+dimension           3
+processors      * * *
+boundary        p p p
+atom_style      atomic
+
+# ATOMS
+#------
+atom_style      atomic
+read_data       atoms.dat
+
+# POTENTIAL
+#----------
+pair_style      airebo 5.0 0 0
+pair_coeff * * CH.airebo C            # airebo
+
+# PARAMETERS
+#-----------
+timestep        0.001
+
+# REGIONS
+#--------
+region 1 block x_1i x_1f -1000 1000 -1000 1000
+region 2 block x_2i x_2f -1000 1000 -1000 1000
+region 3 block -2 2 -2 2 -1000 1000
+
+group left region 1
+group right region 2
+group freezed region 3
+
+velocity freezed set 0.0 0.0 0.0
+
+# COMPUTE
+#--------
+compute tL left temp
+compute tR right temp
+variable deltaT equal c_tR-c_tL
+
+# OUTPUTS
+#--------
+thermo  100
+thermo_style custom step atoms temp c_tL c_tR v_deltaT etotal
+dump    1 all custom 5000 md.lammpstrj id type x y z vx vy vz
+
+# MINIMIZATION
+#-------------
+minimize 1.0e-10 1.0e-10 10000 10000
+
+# FREEZE
+#-------
+fix 	FREEZE freezed setforce 0.0 0.0 0.0
+
+# HEATING
+#--------
+fix     HEATING all nvt temp 300.0 300.0 1
+run     10000
+unfix   HEATING
+
+# HEATING LEFT
+#-------------
+fix     HEATING1 left nvt temp 250.0 250.0 1
+run     20000
+unfix   HEATING1
+
+# HEATING RIGHT
+#--------------
+fix     HEATING2 right nvt temp 350.0 350.0 1
+run     20000
+unfix   HEATING2
+
+# BACKUP
+#-------
+write_dump all custom backup.atoms id type x y z vx vy vz
+
+# NEW OUTPUTS
+#------------
+log log.nve
+thermo  1
+thermo_style custom step atoms temp c_tL c_tR v_deltaT etotal
+
+# EQUILIBRATION
+#--------------
+fix     EQUI all nve
+run     25000
+unfix   EQUI
+
+# UNFREEZE
+#---------
+unfix   freezed
+
+# FINAL ATOMS
+#------------
+write_dump all custom final.atoms id type x y z vx vy vz
