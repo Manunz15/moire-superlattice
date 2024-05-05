@@ -49,6 +49,10 @@ class Lattice:
     def add(self, atoms: pd.DataFrame) -> None:
         self.atoms = atoms
 
+        # create box if it doesn't exist
+        if self.box == [(0, 0)] * 3:
+            self.create_box()
+
     def center(self) -> list:
         self.translate([- self.atoms[xi].mean() for xi in ['x', 'y', 'z']])
 

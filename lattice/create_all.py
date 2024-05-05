@@ -58,5 +58,6 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
                 lt.interchange()
             if double:
                 lt = add_layers(lt, angle = 0)
+
             path = Path(path = [lt.lattice, dir_name, dim_dir])
             save(lt, filenames, path, lammps, plot)
