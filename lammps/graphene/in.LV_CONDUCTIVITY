@@ -1,4 +1,4 @@
-# Lorenzo Manunza 12th April 2024
+# Lorenzo Manunza 6th May 2024
 
 # INITIALIZATION
 #---------------
@@ -6,23 +6,22 @@ units           metal
 dimension           3
 processors      * * *
 boundary        p p p
-atom_style      atomic
 
 # ATOMS
 #------
 atom_style      atomic
 read_data       atoms.dat
+delete_atoms    overlap 0.2 all all
 
 # POTENTIAL
 #----------
 pair_style      airebo 5.0 0 0
-pair_coeff * * CH.airebo C            # airebo
+pair_coeff * * CH.airebo C         
 
 # PARAMETERS
 #-----------
 timestep        0.001
 velocity        all create 300.0 42 dist gaussian
-delete_atoms    overlap 0.2 all all
 
 # REGIONS
 #--------
