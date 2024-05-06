@@ -90,7 +90,7 @@ unfix   EQUI
 
 # UNFREEZE
 #---------
-unfix   freezed
+unfix   FREEZE
 
 # FINAL ATOMS
 #------------

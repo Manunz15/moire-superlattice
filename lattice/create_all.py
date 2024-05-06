@@ -8,7 +8,6 @@ from utils.file import replace
 from utils.path import Path
 
 def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: str) -> None:
-    lattice.velocity(T = 300)
     # box
     replacements = {'x_1i': round(lattice.box[0][0], 3),
             'x_1f': round((lattice.box[0][1] + lattice.box[0][0]) / 2 - 0.05, 3),       # - xhi / 2 + xhi
