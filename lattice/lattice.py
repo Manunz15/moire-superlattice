@@ -165,10 +165,13 @@ class Lattice:
         max_point = cut_box[1]
         
         for pos, coord in zip(min_point, ['x', 'y', 'z']):
-            self.atoms = self.atoms[self.atoms[coord] > pos]
+            self.atoms = self.atoms[self.atoms[coord] >= pos]
 
         for pos, coord in zip(max_point, ['x', 'y', 'z']):
             self.atoms = self.atoms[self.atoms[coord] < pos]
+
+        self.atoms['id'] = np.arange(1, len(self.atoms) + 1)
+        self.atoms.reset_index(drop=True, inplace=True)
 
     def read(self, filename: str) -> None:
         # initialization

@@ -22,6 +22,7 @@ pair_coeff * * CH.airebo C            # airebo
 #-----------
 timestep        0.001
 velocity        all create 300.0 42 dist gaussian
+delete_atoms    overlap 0.2 all all
 
 # REGIONS
 #--------

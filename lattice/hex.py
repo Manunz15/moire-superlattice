@@ -77,7 +77,9 @@ class HexLattice(Lattice):
         max_x: float = L / 2
         min_y: float = - np.sqrt(3) * L / 2
         max_y: float = np.sqrt(3) * L / 2
-        cut_box: list[tuple] = [(min_x, min_y), (max_x + 0.01, max_y + 0.01)]
+        cut_box: list[tuple] = [(min_x, min_y), (max_x, max_y)]
+
+        # cut
         unit_cell.drop(cut_box)
         unit_cell.rotate(90)
 
