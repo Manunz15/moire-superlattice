@@ -283,7 +283,7 @@ class Lattice:
         f.write(f'# Lorenzo Manunza {today()}\n\n')
 
         # general
-        f.write(f'&general\n\tPREFIX = {self.lattice}\n\tMODE = suggest\n\tNAT = {len(self.atoms)}; NKD = 1\n\tKD = C\n/\n\n')
+        f.write(f'&general\n\tPREFIX = {self.lattice}\n\tMODE = suggest\n\tNAT = {len(self.atoms)}; NKD = {len(self.atom_types)}\n\tKD = C\n/\n\n')
 
         # interaction
         f.write(f'&interaction\n\tNORDER = 1  # 1: harmonic, 2: cubic, ..\n/\n\n')
@@ -294,6 +294,8 @@ class Lattice:
         a1 = self.box[0][1] - self.box[0][0]
         a2 = self.box[1][1] - self.box[1][0]
         a3 = self.box[2][1] - self.box[2][0]
+
+        self.atoms['type'] = self.atoms['type'].astype(int)
         f.write(f'&cell\n\t{a1} # factor in Bohr\n\t1.0 0.0 0.0 # a1\n\t0.0 {a2 / a1} 0.0 # a2\n\t0.0 0.0 {a3 / a1} # a3\n/\n\n')
 
         # postion
