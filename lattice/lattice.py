@@ -298,6 +298,9 @@ class Lattice:
         self.atoms['type'] = self.atoms['type'].astype(int)
         f.write(f'&cell\n\t{a1} # factor in Bohr\n\t1.0 0.0 0.0 # a1\n\t0.0 {a2 / a1} 0.0 # a2\n\t0.0 0.0 {a3 / a1} # a3\n/\n\n')
 
+        # cutoff
+        f.write(f'&cutoff\n\tC-C 5.0\n/\n\n')
+
         # postion
         f.write(f'&position\n{self.atoms[["type", "x", "y", "z"]].to_string(header = False, index = False, index_names = False)}')
 
