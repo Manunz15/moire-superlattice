@@ -176,13 +176,17 @@ class Lattice:
     def remove_overlapping_atoms(self) -> None:
         self.write_lammps('lattice/remove_overlapping/atoms.dat')
 
-        execute(Windows = 'cd lattice/remove_overlapping && lmp -in in.REMOVE')
+        execute(Windows = 'cd lattice/remove_overlapping && lmp -in in.REMOVE',
+                Linux = 'cd lattice/remove_overlapping && bash remove.sh')
         self.read('lattice/remove_overlapping/new.atoms')
 
         # remove files
-        execute(Windows = 'del .\lattice\\remove_overlapping\\atoms.dat')
-        execute(Windows = 'del .\lattice\\remove_overlapping\\log.lammps')
-        execute(Windows = 'del .\lattice\\remove_overlapping\\new.atoms')
+        execute(Windows = 'del .\lattice\\remove_overlapping\\atoms.dat',
+                Linux = 'rm lattice/remove_overlapping/atoms.dat')
+        execute(Windows = 'del .\lattice\\remove_overlapping\\log.lammps',
+                Linux = 'rm lattice/remove_overlapping/log.lammps')
+        execute(Windows = 'del .\lattice\\remove_overlapping\\new.atoms',
+                Linux = 'rm lattice/remove_overlapping/new.atoms')
         # if platform.system() == 'Windows':
         #     subprocess.run('cd lattice/remove_overlapping && lmp -in in.REMOVE', shell = True)
         #     subprocess.run('del .\lattice\\remove_overlapping\\atoms.dat', shell = True)
