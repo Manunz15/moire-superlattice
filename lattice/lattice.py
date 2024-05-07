@@ -53,7 +53,11 @@ class Lattice:
 
     def add(self, atoms: pd.DataFrame) -> None:
         self.atoms = atoms
-        self.atoms_num = len(atoms)
+
+        try:
+            self.atoms_num = len(atoms)
+        except:
+            pass
 
         # create box if it doesn't exist
         if self.box == [(0, 0)] * 3:
