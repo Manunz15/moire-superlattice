@@ -18,7 +18,6 @@ class Lattice:
         # initialization
         self.lattice = lattice
         self.name = name if name else lattice
-        self.num_atoms = 0
         self.box = [(0, 0)] * 3
         self.units = 'angstrom'
 
@@ -53,11 +52,6 @@ class Lattice:
 
     def add(self, atoms: pd.DataFrame) -> None:
         self.atoms = atoms
-
-        try:
-            self.atoms_num = len(atoms)
-        except:
-            pass
 
         # create box if it doesn't exist
         if self.box == [(0, 0)] * 3:
@@ -289,7 +283,7 @@ class Lattice:
         f.write(f'# Lorenzo Manunza {today()}\n\n')
 
         # general
-        f.write(f'&general\n\tPREFIX = {self.lattice}\n\tMODE = suggest\n\tNAT = {self.num_atoms}; NKD = 1\n\tKD = C\n/\n\n')
+        f.write(f'&general\n\tPREFIX = {self.lattice}\n\tMODE = suggest\n\tNAT = {len(self.atoms)}; NKD = 1\n\tKD = C\n/\n\n')
 
         # interaction
         f.write(f'&interaction\n\tNORDER = 1  # 1: harmonic, 2: cubic, ..\n/\n\n')
