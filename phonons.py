@@ -4,5 +4,4 @@ from lattice import HexLattice
 
 # create and plot
 graphene = HexLattice('graphene', dim = (1, 1), angle = 1.1)
-# graphene.write_lammps('../phonons/graphene/first_try/atoms.dat')
-graphene.write_alm('test')
+graphene.write_alm('../phonons/graphene/first_try/graphene_alm.in')

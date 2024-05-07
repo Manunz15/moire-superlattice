@@ -21,6 +21,11 @@ class Transform:
                 
         return rotated_vect
     
+    def scale(self, atoms: pd.DataFrame, factor: float) -> None:
+        pos = self.to_array(df = atoms, keys = self.pos_keys)
+        new_pos = pos * factor
+        atoms[self.pos_keys] = new_pos
+
     def translate(self, atoms: pd.DataFrame, trasl: list) -> None:
         # translate all atoms
         if type(trasl) == list:

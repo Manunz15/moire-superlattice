@@ -19,6 +19,7 @@ class Lattice:
         self.lattice = lattice
         self.name = name if name else lattice
         self.box = [(0, 0)] * 3
+        self.units = 'angstrom'
 
         # properties
         if lattice in lattices:
@@ -151,14 +152,36 @@ class Lattice:
         plt.ylabel('Number of atoms')
         plt.show()
 
-    def translate(self, trasl: list) -> None:
+    def scale(self, factor: float) -> None:
+        Transform().scale(self.atoms, factor = factor)
+        self.box = [(self.box[0][0] * factor, self.box[0][1] * factor),
+                    (self.box[1][0] * factor, self.box[1][1] * factor),
+                    (self.box[2][0] * factor, self.box[2][1] * factor),]
+        
+    def translate(self, trasl: list[float]) -> None:
         Transform().translate(self.atoms, trasl = trasl)
+        self.box = [(self.box[0][0] + trasl[0], self.box[0][1] + trasl[0]),
+                    (self.box[1][0] + trasl[1], self.box[1][1] + trasl[1]),
+                    (self.box[2][0] + trasl[2], self.box[2][1] + trasl[2]),]
 
     def rotate(self, angle: float, center: bool = True) -> None:
         Transform().rotate(self.atoms, angle = angle, center = center)
 
     def interchange(self) -> None:
         Transform().permutate(self.atoms, perm = {1:2})
+
+    def align_to_bl(self) -> None:
+        self.translate([- self.atoms['x'].min(), - self.atoms['y'].min(), - self.atoms['z'].min()])
+
+    def angstrom_to_bohr(self) -> None:
+        if self.units == 'angstrom':
+            self.scale(1.88973)
+            self.units = 'bohr'
+
+    def bohr_to_angstrom(self) -> None:
+        if self.units == 'bohr':
+            self.scale(1 / 1.88973)
+            self.units = 'angstrom'
 
     def cut(self, cut_box: list[tuple]) -> None:
         min_point = cut_box[0]
@@ -176,6 +199,7 @@ class Lattice:
     def remove_overlapping_atoms(self) -> None:
         self.write_lammps('lattice/remove_overlapping/atoms.dat')
 
+        # remove overlapping atoms
         execute(Windows = 'cd lattice/remove_overlapping && lmp -in in.REMOVE',
                 Linux = 'cd lattice/remove_overlapping && bash remove.sh')
         self.read('lattice/remove_overlapping/new.atoms')
@@ -187,23 +211,6 @@ class Lattice:
                 Linux = 'rm lattice/remove_overlapping/log.lammps')
         execute(Windows = 'del .\lattice\\remove_overlapping\\new.atoms',
                 Linux = 'rm lattice/remove_overlapping/new.atoms')
-        # if platform.system() == 'Windows':
-        #     subprocess.run('cd lattice/remove_overlapping && lmp -in in.REMOVE', shell = True)
-        #     subprocess.run('del .\lattice\\remove_overlapping\\atoms.dat', shell = True)
-        #     subprocess.run('del .\lattice\\remove_overlapping\\log.lammps', shell = True)
-        # else:
-        #     try:
-        #         subprocess.run('bash lattice/remove_overlapping/remove.sh', shell = True)
-        #     except:
-        #         raise SystemError('Your system is not supported.')
-            
-        # if platform.system() == 'Windows':
-        #     subprocess.run('del .\lattice\\remove_overlapping\\new.atoms', shell = True)
-        # else:
-        #     try:
-        #         subprocess.run('rm lattice/remove_overlapping/new.atoms', shell = True)
-        #     except:
-        #         raise SystemError('Your system is not supported.')
 
     def read(self, filename: str) -> None:
         # initialization
@@ -267,9 +274,29 @@ class Lattice:
         f.close()
 
     def write_alm(self, filename: str) -> None:
+        # remove overlapping atoms
+        self.remove_overlapping_atoms()
+
         f = open(filename, 'w')
 
-        # atoms
-        f.write(f'{self.atoms[["x", "y", "z"]].to_string(header = False, index = False, index_names = False)}')
+        # initial comment
+        f.write(f'# Lorenzo Manunza {today()}\n\n')
+
+        # general
+        f.write(f'&general\n\tPREFIX = {self.lattice}\n\tMODE = suggest\n\tNAT = 64; NKD = 1\n\tKD = C\n/\n\n')
+
+        # interaction
+        f.write(f'&interaction\n\tNORDER = 1  # 1: harmonic, 2: cubic, ..\n/\n\n')
+
+        # cell
+        self.align_to_bl()
+        self.angstrom_to_bohr()
+        a1 = self.box[0][1] - self.box[0][0]
+        a2 = self.box[1][1] - self.box[1][0]
+        a3 = self.box[2][1] - self.box[2][0]
+        f.write(f'&cell\n\t{a1} # factor in Bohr\n\t1.0 0.0 0.0 # a1\n\t0.0 {a2 / a1} 0.0 # a2\n\t0.0 0.0 {a3 / a1} # a3\n/\n\n')
+
+        # postion
+        f.write(f'&position\n{self.atoms[["type", "x", "y", "z"]].to_string(header = False, index = False, index_names = False)}')
 
         f.close()
