@@ -11,12 +11,12 @@ boundary        p p p
 #------
 atom_style      atomic
 read_data       atoms.dat
-delete_atoms    overlap 0.2 all all
 
 # POTENTIAL
 #----------
 pair_style      airebo 5.0 0 0
-pair_coeff * * CH.airebo C         
+pair_coeff * * CH.airebo C    
+delete_atoms    overlap 0.2 all all     
 
 # PARAMETERS
 #-----------

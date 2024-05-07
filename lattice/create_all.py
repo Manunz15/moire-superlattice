@@ -18,7 +18,7 @@ def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: 
     print(path)
     path.copy(filenames = filenames)
     replace(filename = '/'.join([path.path, lammps]), replacements = replacements)
-    lattice.write(filename = f'{path.path}/atoms.dat')
+    lattice.write_lammps(filename = f'{path.path}/atoms.dat')
     
     # plot
     if plot:

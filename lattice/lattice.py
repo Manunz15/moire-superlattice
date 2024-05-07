@@ -3,12 +3,15 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import platform
+import subprocess
 
 from lattice.atomsplot import AtomsPlot
 from lattice.transform import Transform
 from lattice.presets import lattices
 from utils.setting import K_B, uma
 from utils.today import today
+from utils.execute import execute
 
 class Lattice:
     def __init__(self, lattice: str, name: str = None, atoms: pd.DataFrame = None, filename: str = None) -> None:
@@ -52,9 +55,6 @@ class Lattice:
         # create box if it doesn't exist
         if self.box == [(0, 0)] * 3:
             self.create_box()
-
-    def center(self) -> list:
-        self.translate([- self.atoms[xi].mean() for xi in ['x', 'y', 'z']])
 
     def create_box(self, pad: list[float] = None) -> None:
         """
@@ -160,7 +160,7 @@ class Lattice:
     def interchange(self) -> None:
         Transform().permutate(self.atoms, perm = {1:2})
 
-    def drop(self, cut_box: list[tuple]) -> None:
+    def cut(self, cut_box: list[tuple]) -> None:
         min_point = cut_box[0]
         max_point = cut_box[1]
         
@@ -172,6 +172,34 @@ class Lattice:
 
         self.atoms['id'] = np.arange(1, len(self.atoms) + 1)
         self.atoms.reset_index(drop=True, inplace=True)
+
+    def remove_overlapping_atoms(self) -> None:
+        self.write_lammps('lattice/remove_overlapping/atoms.dat')
+
+        execute(Windows = 'cd lattice/remove_overlapping && lmp -in in.REMOVE')
+        self.read('lattice/remove_overlapping/new.atoms')
+
+        # remove files
+        execute(Windows = 'del .\lattice\\remove_overlapping\\atoms.dat')
+        execute(Windows = 'del .\lattice\\remove_overlapping\\log.lammps')
+        execute(Windows = 'del .\lattice\\remove_overlapping\\new.atoms')
+        # if platform.system() == 'Windows':
+        #     subprocess.run('cd lattice/remove_overlapping && lmp -in in.REMOVE', shell = True)
+        #     subprocess.run('del .\lattice\\remove_overlapping\\atoms.dat', shell = True)
+        #     subprocess.run('del .\lattice\\remove_overlapping\\log.lammps', shell = True)
+        # else:
+        #     try:
+        #         subprocess.run('bash lattice/remove_overlapping/remove.sh', shell = True)
+        #     except:
+        #         raise SystemError('Your system is not supported.')
+            
+        # if platform.system() == 'Windows':
+        #     subprocess.run('del .\lattice\\remove_overlapping\\new.atoms', shell = True)
+        # else:
+        #     try:
+        #         subprocess.run('rm lattice/remove_overlapping/new.atoms', shell = True)
+        #     except:
+        #         raise SystemError('Your system is not supported.')
 
     def read(self, filename: str) -> None:
         # initialization
@@ -202,14 +230,13 @@ class Lattice:
 
         self.add(pd.DataFrame(DATA, columns = COLUMNS))
 
-    def write(self, filename: str) -> None:
+    def write_lammps(self, filename: str) -> None:
         f = open(filename, 'w')
 
         # initial comment
         f.write(f'# Lorenzo Manunza {today()}\n\n')
 
         # number of atoms
-        self.atoms
         f.write(f'{len(self.atoms)} atoms\n{len(self.atom_types)} atom types\n\n')
 
         # box dimensions
@@ -232,5 +259,13 @@ class Lattice:
         if 'vx' in self.atoms.keys():
                 f.write('\n\nVelocities\n\n')
                 f.write(f'{self.atoms[["id", "vx", "vy", "vz"]].to_string(header = False, index = False, index_names = False)}')
+
+        f.close()
+
+    def write_alm(self, filename: str) -> None:
+        f = open(filename, 'w')
+
+        # atoms
+        f.write(f'{self.atoms[["x", "y", "z"]].to_string(header = False, index = False, index_names = False)}')
 
         f.close()

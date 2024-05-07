@@ -5,10 +5,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # initialization
-path = '../data/graphene/locked_conductivity_angles/angle_1.10'
+path = '../data/graphene/lv_conductivity/angles/angle_1.20'
 k_list = []
 reduced_chi2_list = []
-thresholds = np.linspace(0.25, 0.8, 12)     # 0.6 noted
+thresholds = np.linspace(0.15, 0.8, 14)     # 0.38 noted
 
 # iterate
 for threshold in thresholds:

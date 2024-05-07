@@ -8,7 +8,7 @@ def plot_fit(time: np.array, dT: np.array, time_fit: np.array, dT_fit: np.array)
     plt.plot(time_fit, dT_fit, '--', c = 'r', label = 'Fit')
     plt.xlabel('Time[s]')
     plt.ylabel('$\Delta$T[K]')
-    plt.yscale('log')
+    # plt.yscale('log')
     plt.show()
 
 def plot_extracted(inverted_k: np.array, inverted_L: np.array, X_fit: np.array, y_fit: np.array, k_inf: float) -> None:

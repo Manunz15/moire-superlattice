@@ -80,7 +80,7 @@ class HexLattice(Lattice):
         cut_box: list[tuple] = [(min_x, min_y), (max_x, max_y)]
 
         # cut
-        unit_cell.drop(cut_box)
+        unit_cell.cut(cut_box)
         unit_cell.rotate(90)
 
         # create lattice from unit cell

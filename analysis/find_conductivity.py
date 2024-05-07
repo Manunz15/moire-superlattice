@@ -19,7 +19,7 @@ def sum_exp(n: int = 1) -> Any:
 
 def find_conductivity(time: pd.Series, dT: pd.Series, atoms_num: int, L: float, S: float, p0: list[float]) -> Any:
     # fitting
-    func = sum_exp()
+    func = sum_exp(100)
     pars, covs = curve_fit(f = func, xdata = time, ydata = dT, p0 = p0)
     time_fit = np.linspace(0, time.max(), 101)
     dT_fit = func(time_fit, * pars)
