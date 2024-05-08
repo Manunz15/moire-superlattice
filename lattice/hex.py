@@ -108,4 +108,4 @@ class HexLattice(Lattice):
         ATOMS['type'] = ATOMS['type'].to_numpy().astype(int)
 
         self.add(ATOMS)
-        self.create_box(pad = [0, 0, 1e4])
+        self.box = [(min_y, rows * x_STEP + min_y), (min_x, cols * y_STEP + min_x), (-1e4, 1e4)]
