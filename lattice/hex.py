@@ -77,7 +77,7 @@ class HexLattice(Lattice):
         max_x: float = L / 2
         min_y: float = - np.sqrt(3) * L / 2
         max_y: float = np.sqrt(3) * L / 2
-        cut_box: list[tuple] = [(min_x, min_y), (max_x, max_y)]
+        cut_box: list[tuple] = [(min_x, min_y), (max_x + 1e-4, max_y + 1e-4)]
 
         # cut
         unit_cell.cut(cut_box)
@@ -90,8 +90,8 @@ class HexLattice(Lattice):
         for index, col in enumerate(COLUMNS):
             UNIT_CELL[:, index] = unit_cell.atoms[col].to_numpy()
             
-        x_STEP = 2 * UNIT_CELL[:, 1].max()
-        y_STEP = 2 * UNIT_CELL[:, 2].max()
+        x_STEP = 2 * max_y
+        y_STEP = 2 * max_x
 
         rows, cols = dim
         for nx in range(rows):
