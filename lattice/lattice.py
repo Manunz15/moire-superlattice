@@ -3,13 +3,11 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import platform
-import subprocess
 
 from lattice.atomsplot import AtomsPlot
 from lattice.transform import Transform
 from lattice.presets import lattices
-from utils.setting import K_B, uma
+from utils.settings import K_B, uma, ang2bohr
 from utils.today import today
 from utils.execute import execute
 
@@ -175,12 +173,12 @@ class Lattice:
 
     def angstrom_to_bohr(self) -> None:
         if self.units == 'angstrom':
-            self.scale(1.88973)
+            self.scale(ang2bohr)
             self.units = 'bohr'
 
     def bohr_to_angstrom(self) -> None:
         if self.units == 'bohr':
-            self.scale(1 / 1.88973)
+            self.scale(1 / ang2bohr)
             self.units = 'angstrom'
 
     def cut(self, cut_box: list[tuple]) -> None:
@@ -299,9 +297,11 @@ class Lattice:
         f.write(f'&cell\n\t{a1} # factor in Bohr\n\t1.0 0.0 0.0 # a1\n\t0.0 {a2 / a1} 0.0 # a2\n\t0.0 0.0 {a3 / a1} # a3\n/\n\n')
 
         # cutoff
-        f.write(f'&cutoff\n\tC-C 5.0\n/\n\n')
+        f.write(f'&cutoff\n\t*-* {5.0 * ang2bohr}\n/\n\n')
 
         # postion
+        for xi, ai in zip(['x', 'y', 'z'], [a1, a2, a3]):
+            self.atoms[xi] = self.atoms[xi] / ai
         f.write(f'&position\n{self.atoms[["type", "x", "y", "z"]].to_string(header = False, index = False, index_names = False)}')
 
         f.close()
