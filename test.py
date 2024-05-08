@@ -2,5 +2,5 @@
 
 from analysis import Lampin
 
-lp = Lampin('../data/graphene/lv_conductivity/angles/angle_0.00/dim_80x100', 'graphene')
+lp = Lampin('../data/graphene/lv_conductivity/angles/angle_0.00/dim_120x100', 'graphene')
 print(lp)
