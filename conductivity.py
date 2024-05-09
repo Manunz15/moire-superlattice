@@ -9,4 +9,4 @@ ANGLES = [0.9, 1.0, 1.1, 1.2, 1.3, 1.5]
 width = 60
 DIMS = [(width, height) for height in range(100, 180 + 1, 20)]
 # create_all(lattice = 'graphene', DIMS = DIMS, dir_name = 'lv_conductivity/onelayer', lammps = 'in.LV_CONDUCTIVITY')
-create_all(lattice = 'graphene', DIMS = DIMS, double = True, dir_name = 'lv_conductivity/rot_bilayer', lammps = 'in.LV_CONDUCTIVITY', plot = '2d')
+create_all(lattice = 'graphene', DIMS = DIMS, double = True, dir_name = 'lv_conductivity/rot_bilayer', lammps = 'in.LV_CONDUCTIVITY')
