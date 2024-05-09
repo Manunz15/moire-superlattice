@@ -18,15 +18,17 @@ class Lampin:
         self.lattice: str = lattice
         self.num_layers: int = num_layers
         self.z_step = lattices[lattice]['z_step']
+
+        self.k: float = 0
         self.k_list: list[float] = []
         self.chi2_list: list[float] = []
         self.rchi2_list: list[float] = []
 
         self.read_data()
-        self.conductivity_trend(plot = True)
+        self.conductivity_trend()
 
     def __str__(self) -> str:
-        return f'k = {self.k:.3f}'
+        return f'k = {self.k:.3f}W/K$\cdot$m'
 
     def read_data(self) -> None:
         # read data
@@ -83,7 +85,7 @@ class Lampin:
         
         return k, chi2, rchi2
 
-    def conductivity_trend(self, num_points: int = 20, plot: bool = False) -> None:
+    def conductivity_trend(self, num_points: int = 40, plot: bool = False) -> None:
         self.thresholds = np.linspace(1 / num_points, 1, num_points)
 
         for threshold in self.thresholds:
@@ -95,9 +97,10 @@ class Lampin:
         pars, _ = curve_fit(f = self.k_exp, xdata = self.thresholds, ydata = np.array(self.k_list), 
                             p0 = [max(self.k_list), self.thresholds.max()])
         self.k = pars[0]
+        
         if plot:
             y_fit: np.array = self.k_exp(self.thresholds, *pars)
-            plt.plot(self.thresholds, y_fit, '--', c = 'r', label = f'$k_\infty$ = {self.k:.3f}[W/K$\cdot$m]')
+            plt.plot(self.thresholds, y_fit, '--', c = 'r', label = f'$k_\infty$ = {self.k:.3f} W/K$\cdot$m')
             plt.legend()
             self.plot_trend()
 

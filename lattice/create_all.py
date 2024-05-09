@@ -53,6 +53,7 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
         # if angles are NOT specified
         else:
             lt = HexLattice(lattice = lattice, dim = dim)
+            lt.rotate(90)
             if interchange:
                 lt.interchange()
             if double:

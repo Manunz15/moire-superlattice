@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from lattice.atomsplot import AtomsPlot
-from lattice.transform import Transform
+from lattice.transform import Transform as tr
 from lattice.presets import lattices
 from utils.settings import K_B, uma, ang2bohr
 from utils.today import today
@@ -151,22 +151,22 @@ class Lattice:
         plt.show()
 
     def scale(self, factor: float) -> None:
-        Transform().scale(self.atoms, factor = factor)
+        tr.scale(self.atoms, factor = factor)
         self.box = [(self.box[0][0] * factor, self.box[0][1] * factor),
                     (self.box[1][0] * factor, self.box[1][1] * factor),
                     (self.box[2][0] * factor, self.box[2][1] * factor),]
         
     def translate(self, trasl: list[float]) -> None:
-        Transform().translate(self.atoms, trasl = trasl)
+        tr.translate(self.atoms, trasl = trasl)
         self.box = [(self.box[0][0] + trasl[0], self.box[0][1] + trasl[0]),
                     (self.box[1][0] + trasl[1], self.box[1][1] + trasl[1]),
                     (self.box[2][0] + trasl[2], self.box[2][1] + trasl[2]),]
 
-    def rotate(self, angle: float, center: bool = True) -> None:
-        Transform().rotate(self.atoms, angle = angle, center = center)
+    def rotate(self, angle: float) -> None:
+        tr.rotate(self.atoms, angle = angle)
 
     def interchange(self) -> None:
-        Transform().permutate(self.atoms, perm = {1:2})
+        tr.permutate(self.atoms, perm = {1:2})
 
     def align_to_bl(self) -> None:
         self.translate([- self.atoms['x'].min(), - self.atoms['y'].min(), - self.atoms['z'].min()])

@@ -1,6 +1,8 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, May 2024
 
-from analysis import Lampin
+from analysis import Lampin, ExtrConductivity, MoireConductivity
 
-lp = Lampin('../data/graphene/lv_conductivity/angles/angle_0.00/dim_120x100', 'graphene')
-print(lp)
+exco = ExtrConductivity('../data/graphene/lv_conductivity/onelayer', 'graphene', plot = True)
+# exco.plot()
+# moire = MoireConductivity('../data/graphene/lv_conductivity/angles', 'graphene')
+# moire.plot()
