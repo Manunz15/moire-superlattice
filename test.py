@@ -1,8 +1,9 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, May 2024
 
-from analysis import Lampin, ExtrConductivity, MoireConductivity
+from lattice import HexLattice, add_layers
 
-exco = ExtrConductivity('../data/graphene/lv_conductivity/onelayer', 'graphene', plot = True)
-# exco.plot()
-# moire = MoireConductivity('../data/graphene/lv_conductivity/angles', 'graphene')
-# moire.plot()
+hbn = HexLattice('h-BN', dim = (60, 100))
+hbn.write_lammps('../simulations/h-BN/test_gap/atoms.dat')
+
+double_hbn = add_layers(hbn)
+double_hbn.write_lammps('../simulations/h-BN/test_double_gap/atoms.dat')

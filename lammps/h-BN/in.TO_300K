@@ -15,8 +15,8 @@ read_data       atoms.dat
 
 # POTENTIAL
 #----------
-pair_style      tersoff
-pair_coeff  * * BNC.tersoff B N
+pair_style      quip
+pair_coeff  * * hBN_GAP.xml "" 5 7
 
 # PARAMETERS
 #-----------

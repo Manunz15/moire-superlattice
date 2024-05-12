@@ -6,6 +6,7 @@ lattices = {
         'potential': 'CH.airebo',
         'step': 1.42,
         'z_step': 3.35,
+        'T_debye': 1813,
         'atom_types': {'C': {'id': 1, 'mass': 12.011}},
         'to_interchange': False
     },
