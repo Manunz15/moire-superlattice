@@ -16,7 +16,7 @@ read_data       atoms.dat
 # POTENTIAL
 #----------
 pair_style      quip
-pair_coeff  * * hBN_GAP.xml "" 5 7
+pair_coeff  * * ../Potential/hBN_GAP.xml "" 5 7
 
 # PARAMETERS
 #-----------
