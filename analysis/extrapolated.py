@@ -46,12 +46,12 @@ class ExtrConductivity:
             X_fit = np.linspace(0, max(self.inv_L_list) * 1.2, 100)
             y_fit = self.polynomial(X_fit, * pars)
 
-            plt.plot(X_fit, y_fit, '--', c = 'r', label = f'$k_\infty$ = {self.k:.3f} W/K$\cdot$m')
+            plt.plot(X_fit, y_fit, '--', c = 'r', label = rf'$k_\infty$ = {self.k:.3f} W/K$\cdot$m')
             plt.legend()
             self.plot()
 
     def plot(self) -> None:
         plt.scatter(self.inv_L_list, self.inv_k_list, zorder = 0)
-        plt.xlabel('1/L[$\AA^{-1}$]')
-        plt.ylabel('1/k[K$\cdot$m/W]')
+        plt.xlabel(r'1/L[$\AA^{-1}$]')
+        plt.ylabel(r'1/k[K$\cdot$m/W]')
         plt.show()
