@@ -1,6 +1,7 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, May 2024
 
 from analysis.read import read_log, read_box
+from analysis.printable import Printable
 from lattice.presets import lattices
 from utils.settings import K_B
 
@@ -11,25 +12,24 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from typing import Callable, Any
 
-class Lampin:
+class Lampin(Printable):
     def __init__(self, path: str, lattice: str, num_layers: int = 2) -> None:
+        super().__init__()
+        
         # initialization
         self.path: str = path
         self.lattice: str = lattice
         self.num_layers: int = num_layers
         self.z_step = lattices[lattice]['z_step']
-        self.T_debye = lattices[lattice]['T_debye']
 
         self.k: float = 0
         self.k_list: list[float] = []
+        self.err_list: list[float] = []
         self.chi2_list: list[float] = []
         self.rchi2_list: list[float] = []
 
         self.read_data()
         self.conductivity_trend()
-
-    def __str__(self) -> str:
-        return f'k = {self.k:.3f}W/K$\cdot$m'
 
     def read_data(self) -> None:
         # read data
@@ -68,11 +68,12 @@ class Lampin:
         y: np.array = self.y[:int(len(self.y) * threshold)]
 
         # fitting
-        pars, _ = curve_fit(f = exp_series, xdata = X, ydata = y, p0 = [y[0], self.X[np.where(y > y[0] / np.e)][-1]])
+        pars, covs = curve_fit(f = exp_series, xdata = X, ydata = y, p0 = [y[0], self.X[np.where(y > y[0] / np.e)][-1]])
         self.temp_fit: np.array = exp_series(X, *pars)
 
         # thermal conductivity
-        k: float = (self.T_debye / self.T) * ((3 * K_B) * self.L * self.num_atoms) / (4 * (np.pi ** 2) * (pars[1] * 1) * self.S) * 1e10
+        k: float = ((3 * K_B) * self.L * self.num_atoms) / (4 * (np.pi ** 2) * pars[1] * self.S) * 1e10
+        k_err: float = k * (np.sqrt(covs[1][1]) / pars[1])
 
         # chi squared
         y_pred: np.array = exp_series(X, *pars)
@@ -84,22 +85,24 @@ class Lampin:
             plt.plot(X, self.temp_fit, '--', c = 'r')
             self.plot_temp(X, y)
         
-        return k, chi2, rchi2
+        return k, k_err, chi2, rchi2
 
     def conductivity_trend(self, num_points: int = 40, plot: bool = False) -> None:
         self.thresholds = np.linspace(1 / num_points, 1, num_points)
 
         for threshold in self.thresholds:
-            k, chi2, rchi2 = self.find_conductivity(threshold)
+            k, k_err, chi2, rchi2 = self.find_conductivity(threshold)
             self.k_list.append(k)
+            self.err_list.append(k_err)
             self.chi2_list.append(chi2)
             self.rchi2_list.append(rchi2)
 
         # fit conductivity
-        pars, _ = curve_fit(f = self.k_exp, xdata = self.thresholds, ydata = np.array(self.k_list), 
-                            p0 = [self.k_list[-1], 1])
+        pars, covs = curve_fit(f = self.k_exp, xdata = self.thresholds, ydata = np.array(self.k_list), 
+                            p0 = [self.k_list[-1], 1], sigma = self.err_list)
 
         self.k = pars[0]
+        self.k_err = np.sqrt(covs[0][0])
         self.y_fit: np.array = self.k_exp(self.thresholds, *pars)
         
         # plot
@@ -114,23 +117,24 @@ class Lampin:
 
         plt.plot(X, y, zorder = 0)
         plt.xlabel('Time[s]')
-        plt.ylabel('$\Delta$T[K]')
+        plt.ylabel(r'$\Delta$T[K]')
         plt.show()
 
     def plot(self, value: str = 'k') -> None:
         # plottable values
-        plottable_values: dict[str, dict] = {'k': {'data': self.k_list, 'label': 'k[W/K$\cdot$m]'}, 
-                                            'chi2': {'data': self.chi2_list, 'label': '$\chi^2$'}, 
-                                            'rchi2': {'data': self.rchi2_list, 'label': '$\\tilde{\chi}^2$'}}
+        plottable_values: dict[str, dict] = {'k': {'data': self.k_list, 'yerr': self.err_list, 'label': r'k[W/K$\cdot$m]'}, 
+                                            'chi2': {'data': self.chi2_list, 'yerr': None, 'label': r'$\chi^2$'}, 
+                                            'rchi2': {'data': self.rchi2_list, 'yerr': None, 'label': r'$\tilde{\chi}^2$'}}
         
         if value not in plottable_values.keys():
             raise NameError(f'{value} is not a plottable value. Choose between: {list(plottable_values.keys())}')
         
         if value == 'k':
-            plt.plot(self.thresholds, self.y_fit, '--', c = 'r', label = f'$k_\infty$ = {self.k:.3f} W/K$\cdot$m')
+            plt.plot(self.thresholds, self.y_fit, '--', c = 'r', label = rf'$k_\infty$ = ({self.k:.3f}$\pm${self.k_err:.3f})W/K$\cdot$m')
             plt.legend()
         
-        plt.plot(self.thresholds, plottable_values[value]['data'], marker = '.', zorder = 0)
+        # plt.plot(self.thresholds, plottable_values[value]['data'], marker = '.', zorder = 0)
+        plt.errorbar(self.thresholds, plottable_values[value]['data'], yerr = plottable_values[value]['yerr'], marker = '.', zorder = 0)
         plt.xlabel('Threshold')
         plt.ylabel(plottable_values[value]['label'])
         plt.show()
