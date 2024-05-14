@@ -9,4 +9,4 @@ from lattice import HexLattice, create_all, Lattice
 height = 100
 DIMS = [(width, height) for width in range(70, 130 + 1, 20)]
 # create_all(lattice = 'graphene', DIMS = DIMS, dir_name = 'lv_conductivity/onelayer', lammps = 'in.LV_CONDUCTIVITY')
-create_all(lattice = 'graphene', DIMS = DIMS, double = True, dir_name = 'lv_conductivity/bilayer', lammps = 'in.LV_CONDUCTIVITY')
+create_all(lattice = 'graphene', DIMS = DIMS, double = True, dir_name = 'lv_conductivity/more_bilayer', lammps = 'in.LV_CONDUCTIVITY')
