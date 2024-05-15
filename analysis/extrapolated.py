@@ -53,7 +53,7 @@ class ExtrConductivity(Printable):
 
     def plot(self) -> None:
         plt.errorbar(self.inv_L_list, self.inv_k_list, yerr = self.inv_err_list, fmt="o", zorder = 0)
-        plt.plot(self.X_fit, self.y_fit, '--', c = 'r', label = rf'$k_\infty$ = {self.k:.3f} W/K$\cdot$m')
+        plt.plot(self.X_fit, self.y_fit, '--', c = 'r', label = rf'$k_\infty$ = ({self.k:.0f}$\pm${self.k_err:.0f})W/K$\cdot$m')
         plt.xlabel(r'1/L[$\AA^{-1}$]')
         plt.ylabel(r'1/k[K$\cdot$m/W]')
         plt.legend()

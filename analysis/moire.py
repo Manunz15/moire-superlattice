@@ -30,8 +30,11 @@ class MoireConductivity:
             self.angle_list.append(angle)
             self.exco_list.append(exco)
 
-    def plot(self) -> None:
-        plt.errorbar(self.angle_list, self.k_list, yerr = self.err_list, zorder = 0)
+    def plot(self, err = False) -> None:
+        if err:
+            plt.errorbar(self.angle_list, self.k_list, yerr = self.err_list, marker = 'o')
+        else:
+            plt.plot(self.angle_list, self.k_list, marker = 'o')
         plt.xlabel(r'$\theta$°')
         plt.ylabel(r'k[W/K$\cdot$m]')
         plt.show()

@@ -122,9 +122,9 @@ class Lampin(Printable):
 
     def plot(self, value: str = 'k') -> None:
         # plottable values
-        plottable_values: dict[str, dict] = {'k': {'data': self.k_list, 'yerr': self.err_list, 'label': r'k[W/K$\cdot$m]'}, 
-                                            'chi2': {'data': self.chi2_list, 'yerr': None, 'label': r'$\chi^2$'}, 
-                                            'rchi2': {'data': self.rchi2_list, 'yerr': None, 'label': r'$\tilde{\chi}^2$'}}
+        plottable_values: dict[str, dict] = {'k': {'data': self.k_list, 'yerr': self.err_list, 'ylabel': r'k[W/K$\cdot$m]'}, 
+                                            'chi2': {'data': self.chi2_list, 'yerr': None, 'ylabel': r'$\chi^2$'}, 
+                                            'rchi2': {'data': self.rchi2_list, 'yerr': None, 'ylabel': r'$\tilde{\chi}^2$'}}
         
         if value not in plottable_values.keys():
             raise NameError(f'{value} is not a plottable value. Choose between: {list(plottable_values.keys())}')
@@ -133,8 +133,7 @@ class Lampin(Printable):
             plt.plot(self.thresholds, self.y_fit, '--', c = 'r', label = rf'$k_\infty$ = ({self.k:.3f}$\pm${self.k_err:.3f})W/K$\cdot$m')
             plt.legend()
         
-        # plt.plot(self.thresholds, plottable_values[value]['data'], marker = '.', zorder = 0)
         plt.errorbar(self.thresholds, plottable_values[value]['data'], yerr = plottable_values[value]['yerr'], marker = '.', zorder = 0)
         plt.xlabel('Threshold')
-        plt.ylabel(plottable_values[value]['label'])
+        plt.ylabel(plottable_values[value]['ylabel'])
         plt.show()

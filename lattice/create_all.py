@@ -24,7 +24,8 @@ def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: 
     if plot:
         lattice.plot(projection = plot)
 
-def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, double: bool = False, interchange: bool = False, plot: str = None) -> None:
+def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, 
+               double: bool = False, rot: bool = False, interchange: bool = False, plot: str = None) -> None:
     # files to copy
     filenames = ['/'.join(['lammps', lattice, lattices[lattice]['potential']]),
          '/'.join(['lammps', lattice, lammps])]
@@ -53,6 +54,8 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
         # if angles are NOT specified
         else:
             lt = HexLattice(lattice = lattice, dim = dim)
+            if rot:
+                lt.rotate(90)
             if interchange:
                 lt.interchange()
             if double:
