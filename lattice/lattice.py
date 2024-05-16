@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from lattice.atomsplot import AtomsPlot
 from lattice.transform import Transform as tr
 from lattice.presets import lattices
-from utils.settings import K_B, uma, ang2bohr
-from utils.today import today
+from utils.settings import K_B, ang2bohr
+from utils.time import today
 from utils.execute import execute
 
 class Lattice:
@@ -25,6 +25,7 @@ class Lattice:
             self.step: float = lattices[lattice]['step']
             self.z_step: float = lattices[lattice]['z_step']
             self.atom_types: dict[str, dict] = lattices[lattice]['atom_types']
+            self.num_types: int = len(self.atom_types)
             self.to_interchange: bool = lattices[lattice]['to_interchange']
             self.box_pad = [self.step, self.step * np.sin(np.pi / 3), 1e4]
         else:
@@ -90,51 +91,6 @@ class Lattice:
             self.box = [(xlo, xhi), (ylo, yhi), (zlo, zhi)]
         except:
             pass
-
-    def velocity(self, T: float = 300) -> None:
-        # create velocity columns
-        for vi in ['vx', 'vy', 'vz']:
-            if vi not in self.atoms.columns:
-                self.atoms.insert(len(self.atoms.columns), vi, np.zeros(len(self.atoms)), True)
-
-        if T == 0:
-            return 0            
-
-        for atom_properties in self.atom_types.values():    
-            # initialization        
-            m = atom_properties['mass'] * uma
-            len_v = int(1e4)
-            len_random = int(len(self.atoms[self.atoms['type'] == atom_properties['id']]))
-
-            # velocity distribution
-            v = np.linspace(0, 15000, len_v)
-            dv = np.full(len_v, fill_value = v[1] - v[0])
-            fv = 4 * np.pi * (v ** 2) * (m / (2 * np.pi * K_B * T)) ** 1.5 * np.exp(- m * (v ** 2) / (2 * K_B * T)) 
-
-            # inverse trasform sampling
-            integral = np.zeros(len(fv))
-            for index in range(len(fv)):
-                integral[index] = np.dot(fv[:index], dv[:index])
-
-            # generate velocities
-            random_num = np.random.random(len_random)
-            random_v = np.zeros(len_random)
-            for index, num in enumerate(random_num):
-                random_v[index] = v[np.argmin(abs(integral - num))]
-
-            # convert in argstrom / picoseconds
-            random_v /= 100
-
-            # random angles
-            random_angles = 2 * np.pi * np.random.random(len_random)
-            random_cos = np.cos(random_angles)
-            random_sin = np.sin(random_angles)
-            random_vx = random_v * random_cos
-            random_vy = random_v * random_sin
-
-            # save velocities
-            self.atoms.loc[self.atoms['type'] == atom_properties['id'], 'vx'] = random_vx
-            self.atoms.loc[self.atoms['type'] == atom_properties['id'], 'vy'] = random_vy
 
     def plot(self, projection: str = '2d') -> None:
         AtomsPlot(atoms = self.atoms, name = self.name, projection = projection)
@@ -203,11 +159,11 @@ class Lattice:
         self.read('lattice/remove_overlapping/new.atoms')
 
         # remove files
-        execute(Windows = 'del .\lattice\\remove_overlapping\\atoms.dat',
+        execute(Windows = r'del .\lattice\remove_overlapping\atoms.dat',
                 Linux = 'rm lattice/remove_overlapping/atoms.dat')
-        execute(Windows = 'del .\lattice\\remove_overlapping\\log.lammps',
+        execute(Windows = r'del .\lattice\remove_overlapping\log.lammps',
                 Linux = 'rm lattice/remove_overlapping/log.lammps')
-        execute(Windows = 'del .\lattice\\remove_overlapping\\new.atoms',
+        execute(Windows = r'del .\lattice\remove_overlapping\new.atoms',
                 Linux = 'rm lattice/remove_overlapping/new.atoms')
 
     def read(self, filename: str) -> None:
@@ -299,9 +255,10 @@ class Lattice:
         # cutoff
         f.write(f'&cutoff\n\t*-* {5.0 * ang2bohr}\n/\n\n')
 
-        # postion
+        # position
         for xi, ai in zip(['x', 'y', 'z'], [a1, a2, a3]):
             self.atoms[xi] = self.atoms[xi] / ai
         f.write(f'&position\n{self.atoms[["type", "x", "y", "z"]].to_string(header = False, index = False, index_names = False)}')
 
+        # close
         f.close()

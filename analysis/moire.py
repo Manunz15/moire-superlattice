@@ -1,6 +1,7 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, May 2024
 
 from analysis.extrapolated import ExtrConductivity
+from lattice.hex import HexLattice as hex
 
 import os
 import matplotlib.pyplot as plt
@@ -25,9 +26,12 @@ class MoireConductivity:
             new_path = os.path.join(self.path, dir)
             exco = ExtrConductivity(new_path, self.lattice, 2)
 
+            if angle:
+                _, __, angle = hex.moire_angle(angle)
+
             self.k_list.append(exco.k)
             self.err_list.append(exco.k_err)
-            self.angle_list.append(angle)
+            self.angle_list.append(round(angle, 2))
             self.exco_list.append(exco)
 
     def plot(self, err = False) -> None:
