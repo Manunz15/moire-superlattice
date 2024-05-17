@@ -30,7 +30,7 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
                double: bool = False, rot: bool = False, interchange: bool = False, plot: str = None) -> None:
     # files to copy
     files: list = copy(lattices[lattice]['potential'])
-    print(files)
+
     if type(files) == list:
         files.append(lammps)
     else:
@@ -38,36 +38,36 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
 
     filenames = ['/'.join(['lammps', lattice, file]) for file in files]
     
-    # if type(DIMS) != list:
-    #     DIMS = [DIMS]
+    if type(DIMS) != list:
+        DIMS = [DIMS]
 
-    # # iterate for shape
-    # for dim in DIMS:
-    #     lt = HexLattice(lattice = lattice, dim = dim)
+    # iterate for shape
+    for dim in DIMS:
+        lt = HexLattice(lattice = lattice, dim = dim)
         
-    #     if len(DIMS) == 1:
-    #         dim_dir = ''
-    #         dir_name = f'{dir_name}_{dim[0]}x{dim[1]}'
-    #     else:
-    #         dim_dir = f'dim_{dim[0]}x{dim[1]}'
+        if len(DIMS) == 1:
+            dim_dir = ''
+            dir_name = f'{dir_name}_{dim[0]}x{dim[1]}'
+        else:
+            dim_dir = f'dim_{dim[0]}x{dim[1]}'
         
-    #     # if angles are specified
-    #     if ANGLES:
-    #         for angle in ANGLES:
-    #             lt = HexLattice(lattice = lattice, dim = dim, angle = angle)
-    #             angle_dir = '' if len(ANGLES) == 1 else f'angle_{angle:.2f}'
-    #             path = Path(path = [lt.lattice, dir_name, angle_dir, dim_dir])
-    #             save(lt, filenames, path, lammps, plot)
+        # if angles are specified
+        if ANGLES:
+            for angle in ANGLES:
+                lt = HexLattice(lattice = lattice, dim = dim, angle = angle)
+                angle_dir = '' if len(ANGLES) == 1 else f'angle_{angle:.2f}'
+                path = Path(path = [lt.lattice, dir_name, angle_dir, dim_dir])
+                save(lt, filenames, path, lammps, plot)
                 
-    #     # if angles are NOT specified
-    #     else:
-    #         lt = HexLattice(lattice = lattice, dim = dim)
-    #         if rot:
-    #             lt.rotate(90)
-    #         if interchange:
-    #             lt.interchange()
-    #         if double:
-    #             lt = add_layers(lt, angle = 0)
+        # if angles are NOT specified
+        else:
+            lt = HexLattice(lattice = lattice, dim = dim)
+            if rot:
+                lt.rotate(90)
+            if interchange:
+                lt.interchange()
+            if double:
+                lt = add_layers(lt, angle = 0)
 
-    #         path = Path(path = [lt.lattice, dir_name, dim_dir])
-    #         save(lt, filenames, path, lammps, plot)
+            path = Path(path = [lt.lattice, dir_name, dim_dir])
+            save(lt, filenames, path, lammps, plot)
