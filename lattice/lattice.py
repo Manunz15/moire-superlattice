@@ -106,6 +106,12 @@ class Lattice:
         plt.ylabel('Number of atoms')
         plt.show()
 
+    def centering(self) -> None:
+        self.translate([- self.atoms['x'].mean(), - self.atoms['y'].mean(), - self.atoms['z'].mean()])
+
+    def align_to_bl(self) -> None:
+        self.translate([- self.atoms['x'].min(), - self.atoms['y'].min(), - self.atoms['z'].min()])
+
     def scale(self, factor: float) -> None:
         tr.scale(self.atoms, factor = factor)
         self.box = [(self.box[0][0] * factor, self.box[0][1] * factor),
@@ -123,9 +129,6 @@ class Lattice:
 
     def interchange(self) -> None:
         tr.permutate(self.atoms, perm = {1:2})
-
-    def align_to_bl(self) -> None:
-        self.translate([- self.atoms['x'].min(), - self.atoms['y'].min(), - self.atoms['z'].min()])
 
     def angstrom_to_bohr(self) -> None:
         if self.units == 'angstrom':
@@ -196,6 +199,8 @@ class Lattice:
         self.add(pd.DataFrame(DATA, columns = COLUMNS))
 
     def write_lammps(self, filename: str) -> None:
+        self.centering()
+        
         f = open(filename, 'w')
 
         # initial comment

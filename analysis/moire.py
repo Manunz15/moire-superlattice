@@ -24,6 +24,7 @@ class MoireConductivity:
         for dir in tqdm(os.listdir(self.path), ascii = ' =', bar_format = '{l_bar}{bar:50}{r_bar}{bar:-10b}'):
             angle = float(dir.split('_')[-1])
             new_path = os.path.join(self.path, dir)
+            print(new_path)
             exco = ExtrConductivity(new_path, self.lattice, 2)
 
             if angle:
