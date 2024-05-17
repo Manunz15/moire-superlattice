@@ -6,7 +6,6 @@ units           metal
 dimension	    3
 processors      * * *
 boundary        p p p
-atom_style      atomic
 
 # ATOMS
 #------

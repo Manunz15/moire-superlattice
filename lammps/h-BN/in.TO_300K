@@ -2,25 +2,28 @@
 
 # INITIALIZATION
 #---------------
-units           metal
+units           real
 dimension	    3
 processors      * * *
 boundary        p p p
-atom_style      atomic
 
 # ATOMS
 #------
-atom_style      atomic
+atom_style      charge
 read_data       atoms.dat
 
 # POTENTIAL
 #----------
-pair_style      quip
-pair_coeff  * * potential/hBN_GAP.xml "" 5 7
+pair_style	reax/c lmp_control
+pair_coeff	* * ffield.reax.AB B N
+
+neighbor	2 bin
+neigh_modify	every 10 delay 0 check no
 
 # PARAMETERS
 #-----------
-timestep        0.001 
+timestep        1
+fix             PARAM all qeq/reax 1 0.0 10.0 1e-6 param.qeq
 
 # OUTPUTS
 #--------
@@ -49,6 +52,8 @@ unfix   HEATING
 fix     EQUI all nve
 run     10000
 unfix   EQUI
+
+unfix   PARAM
 
 # SAVE ATOMS
 #-----------

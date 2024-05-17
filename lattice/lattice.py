@@ -27,6 +27,7 @@ class Lattice:
             self.atom_types: dict[str, dict] = lattices[lattice]['atom_types']
             self.num_types: int = len(self.atom_types)
             self.to_interchange: bool = lattices[lattice]['to_interchange']
+            self.charged: bool = lattices[lattice]['charged']
             self.box_pad = [self.step, self.step * np.sin(np.pi / 3), 1e4]
         else:
             raise NameError(f"'{lattice}' is not a defined lattice, please change lattice or add data for '{lattice}' in <presets.py>.")
@@ -199,6 +200,7 @@ class Lattice:
         self.add(pd.DataFrame(DATA, columns = COLUMNS))
 
     def write_lammps(self, filename: str) -> None:
+        # centering 
         self.centering()
         
         f = open(filename, 'w')
@@ -221,9 +223,15 @@ class Lattice:
         for atom_type in self.atom_types:
             f.write(f'{self.atom_types[atom_type]["id"]} {self.atom_types[atom_type]["mass"]} # {atom_type}\n')
 
+        # if charged
+        cols = ['id', 'type', 'x', 'y', 'z']
+        if self.charged:
+            self.atoms.insert(2, 'charge', np.zeros(len(self.atoms)), True)
+            cols = ['id', 'type', 'charge', 'x', 'y', 'z']
+
         # atoms
         f.write('\nAtoms\n\n')
-        f.write(f'{self.atoms[["id", "type", "x", "y", "z"]].to_string(header = False, index = False, index_names = False)}')
+        f.write(f'{self.atoms[cols].to_string(header = False, index = False, index_names = False)}')
 
         # velocities
         if 'vx' in self.atoms.keys():

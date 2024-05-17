@@ -27,8 +27,13 @@ def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: 
 def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, 
                double: bool = False, rot: bool = False, interchange: bool = False, plot: str = None) -> None:
     # files to copy
-    filenames = ['/'.join(['lammps', lattice, lattices[lattice]['potential']]),
-         '/'.join(['lammps', lattice, lammps])]
+    files: list = lattices[lattice]['potential']
+    if type(files) == list:
+        files.append(lammps)
+    else:
+        files = [files, lammps]
+
+    filenames = ['/'.join(['lammps', lattice, file]) for file in files]
     
     if type(DIMS) != list:
         DIMS = [DIMS]
