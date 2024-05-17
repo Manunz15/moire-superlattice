@@ -16,6 +16,7 @@ read_data       atoms.dat
 #----------
 pair_style	reax/c lmp_control
 pair_coeff	* * ffield.reax.AB B N
+fix             PARAM all qeq/reax 1 0.0 10.0 1e-6 param.qeq
 
 neighbor	2 bin
 neigh_modify	every 10 delay 0 check no
@@ -25,7 +26,6 @@ delete_atoms    overlap 0.2 all all
 # PARAMETERS
 #-----------
 timestep        1
-fix             PARAM all qeq/reax 1 0.0 10.0 1e-6 param.qeq
 
 # REGIONS
 #--------

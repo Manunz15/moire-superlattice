@@ -20,7 +20,7 @@ do
         eval "$(conda shell.bash hook)"
         conda activate my-lammps
         export OMP_NUM_THREADS=1
-        mpirun -np 56 lmp_reaxff -in in.LV_CONDUCTIVITY
+        mpirun -np 56 ~/lmp_reaxff -in in.LV_CONDUCTIVITY
         conda deactivate	
         cd $base
     done
