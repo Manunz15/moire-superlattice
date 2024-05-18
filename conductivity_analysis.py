@@ -2,8 +2,12 @@
 
 from analysis import Lampin, ExtrConductivity, MoireConductivity
 
-exco = ExtrConductivity('../data/graphene/lv_conductivity/monolayer', 'graphene')
-exco.plot()
+lp = Lampin('../data/graphene/lv_conductivity/monolayer/dim_100x60', 'graphene')
+lp.plot()
+lp.plot_temp()
 
-moire = MoireConductivity('../data/graphene/lv_conductivity/angles', 'graphene')
-moire.plot(err = True)
+# exco = ExtrConductivity('../data/graphene/lv_conductivity/monolayer', 'graphene')
+# exco.plot()
+
+# moire = MoireConductivity('../data/graphene/lv_conductivity/angles', 'graphene')
+# moire.plot(err = True)

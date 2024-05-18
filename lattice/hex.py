@@ -105,6 +105,7 @@ class HexLattice(Lattice):
         rows, cols = dim
         ATOMS = self.duplicate_cell(UNIT_CELL, (x_STEP, y_STEP), [(0, rows), (0, cols)], COLUMNS, (1, 2))
         ATOMS.insert(0, 'id', np.arange(1, len(ATOMS) + 1).astype(int), True)
+        ATOMS['type'] = ATOMS['type'].to_numpy().astype(int)
 
         # save
         self.add(ATOMS)
