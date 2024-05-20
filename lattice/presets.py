@@ -18,5 +18,5 @@ lattices = {
         'atom_types': {'B': {'id': 1, 'mass': 10.811},
                        'N': {'id': 2, 'mass': 14.0067}},
         'to_interchange': True,
-        'charged': True
+        'charged': False
     },}

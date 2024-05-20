@@ -13,14 +13,14 @@ create_all(lattice = lattice, DIMS = DIMS, ANGLES = ANGLES, dir_name = 'lv_condu
 # test section
 DIMS = [(1, height) for height in range(1, 7 + 1)]
 ANGLES = [1.5]
-create_all(lattice = lattice, DIMS = DIMS, ANGLES = ANGLES, dir_name = 'lv_conductivity/test_section', lammps = 'in.LV_CONDUCTIVITY')
+create_all(lattice = lattice, DIMS = DIMS, ANGLES = ANGLES, dir_name = 'lv_conductivity/test_section_1.50', lammps = 'in.LV_CONDUCTIVITY')
 
 # monolayer and bilayer
-# width, height = 100, 60
-# DIMS = [(width * n, height) for n in range(1, 7 + 1)]
-# create_all(lattice = lattice, DIMS = DIMS, dir_name = 'lv_conductivity/monolayer', lammps = 'in.LV_CONDUCTIVITY')
+width, height = 100, 60
+DIMS = [(width * n, height) for n in range(1, 7 + 1)]
+create_all(lattice = lattice, DIMS = DIMS, dir_name = 'lv_conductivity/monolayer', lammps = 'in.LV_CONDUCTIVITY')
 
-# width, height = 40, 120
-# DIMS = [(width, height * n) for n in range(1, 7 + 1)]
-# create_all(lattice = lattice, DIMS = DIMS, double = True, dir_name = 'lv_conductivity/bilayer', 
-#            lammps = 'in.LV_CONDUCTIVITY', rot = True)
+width, height = 40, 120
+DIMS = [(width, height * n) for n in range(1, 7 + 1)]
+create_all(lattice = lattice, DIMS = DIMS, double = True, dir_name = 'lv_conductivity/bilayer', 
+           lammps = 'in.LV_CONDUCTIVITY', rot = True)

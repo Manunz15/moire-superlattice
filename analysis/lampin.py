@@ -45,9 +45,9 @@ class Lampin(Printable):
         self.T: float = data['Temp'][len(data) - 1]
 
         # select data
-        time: np.array = data['Step'].to_numpy() * 1e-15
-        self.X: np.array = (time - time.min())
-        self.y: np.array = data['v_deltaT'].to_numpy()
+        time: np.ndarray = data['Step'].to_numpy() * 1e-15
+        self.X: np.ndarray = (time - time.min())
+        self.y: np.ndarray = data['v_deltaT'].to_numpy()
 
     def sum_exp(self, n: int = 1) -> Callable:
         def curve(X: Any, a: float, tau: float) -> Any:
@@ -64,12 +64,12 @@ class Lampin(Printable):
     def find_conductivity(self, threshold: float = 1, plot: bool = False) -> None:
         # data
         exp_series = self.sum_exp(5)
-        X: np.array = self.X[:int(len(self.X) * threshold)]
-        y: np.array = self.y[:int(len(self.y) * threshold)]
+        X: np.ndarray = self.X[:int(len(self.X) * threshold)]
+        y: np.ndarray = self.y[:int(len(self.y) * threshold)]
 
         # fitting
         pars, covs = curve_fit(f = exp_series, xdata = X, ydata = y, p0 = [y[0], self.X[np.where(y > y[0] / np.e)][-1]])
-        self.temp_fit: np.array = exp_series(X, *pars)
+        self.temp_fit: np.ndarray = exp_series(X, *pars)
 
         # thermal conductivity
         k: float = ((3 * K_B) * self.L * self.num_atoms) / (4 * (np.pi ** 2) * pars[1] * self.S) * 1e10
@@ -87,8 +87,8 @@ class Lampin(Printable):
         
         return k, k_err, chi2, rchi2
 
-    def conductivity_trend(self, num_points: int = 40, plot: bool = False) -> None:
-        self.thresholds = np.linspace(1 / num_points, 1, num_points)
+    def conductivity_trend(self, num_points: int = 50, plot: bool = False) -> None:
+        self.thresholds = np.linspace(0.01, 1, num_points)
 
         for threshold in self.thresholds:
             k, k_err, chi2, rchi2 = self.find_conductivity(threshold)
@@ -102,7 +102,7 @@ class Lampin(Printable):
                             p0 = [self.k_list[-1], 1], sigma = self.err_list)
 
         self.k = pars[0]
-        self.k_err = np.sqrt(covs[0][0])
+        self.k_err = 0.05 * self.k  # from the study of section dependance
         self.y_fit: np.array = self.k_exp(self.thresholds, *pars)
         
         # plot
