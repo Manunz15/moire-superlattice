@@ -7,8 +7,7 @@ lattices = {
         'step': 1.42,
         'z_step': 3.35,
         'atom_types': {'C': {'id': 1, 'mass': 12.011}},
-        'to_interchange': False,
-        'charged': False
+        'to_interchange': False
     },
     # source: place holder
     'h-BN': {
@@ -17,6 +16,5 @@ lattices = {
         'z_step': 3.335,
         'atom_types': {'B': {'id': 1, 'mass': 10.811},
                        'N': {'id': 2, 'mass': 14.0067}},
-        'to_interchange': True,
-        'charged': False
+        'to_interchange': True
     },}
