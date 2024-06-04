@@ -7,14 +7,17 @@ lattices = {
         'step': 1.42,
         'z_step': 3.35,
         'atom_types': {'C': {'id': 1, 'mass': 12.011}},
-        'to_interchange': False
+        'to_interchange': False,
+        'full': False
     },
-    # source: place holder
+    # step source: place holder
+    # z step source: https://link.springer.com/article/10.1007/s11249-018-1078-y
     'h-BN': {
         'potential': ['ffield.reax.AB', 'lmp_control', 'param.qeq'],
-        'step': 1.446,
-        'z_step': 3.335,
+        'step': 1.45,
+        'z_step': 3.35,
         'atom_types': {'B': {'id': 1, 'mass': 10.811},
                        'N': {'id': 2, 'mass': 14.0067}},
-        'to_interchange': True
+        'to_interchange': True,
+        'full': True
     },}

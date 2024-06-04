@@ -27,6 +27,7 @@ class Lattice:
             self.atom_types: dict[str, dict] = lattices[lattice]['atom_types']
             self.num_types: int = len(self.atom_types)
             self.to_interchange: bool = lattices[lattice]['to_interchange']
+            self.full: bool = lattices[lattice]['full']
             self.box_pad = [self.step, self.step * np.sin(np.pi / 3), 1e4]
         else:
             raise NameError(f"'{lattice}' is not a defined lattice, please change lattice or add data for '{lattice}' in <presets.py>.")
@@ -105,6 +106,9 @@ class Lattice:
         plt.xlabel('v[Å/ps]')
         plt.ylabel('Number of atoms')
         plt.show()
+
+    def calculate_gr(self) -> None:
+        pass
 
     def centering(self) -> None:
         self.translate([- self.atoms['x'].mean(), - self.atoms['y'].mean(), - self.atoms['z'].mean()])
@@ -224,13 +228,17 @@ class Lattice:
 
         # atoms
         cols = ['id', 'type', 'x', 'y', 'z']
+        if self.full:
+            self.atoms.insert(1, 'molecule', np.zeros(len(self.atoms)).astype(int), True)
+            self.atoms.insert(3, 'q', np.zeros(len(self.atoms)).astype(int), True)
+            cols = ['id', 'molecule', 'type', 'q', 'x', 'y', 'z']
         f.write('\nAtoms\n\n')
         f.write(f'{self.atoms[cols].to_string(header = False, index = False, index_names = False)}')
 
         # velocities
         if 'vx' in self.atoms.keys():
-                f.write('\n\nVelocities\n\n')
-                f.write(f'{self.atoms[["id", "vx", "vy", "vz"]].to_string(header = False, index = False, index_names = False)}')
+            f.write('\n\nVelocities\n\n')
+            f.write(f'{self.atoms[["id", "vx", "vy", "vz"]].to_string(header = False, index = False, index_names = False)}')
 
         f.close()
 
