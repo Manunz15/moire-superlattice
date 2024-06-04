@@ -1,31 +1,28 @@
-# Lorenzo Manunza 17th May 2024
+# Lorenzo Manunza 4th June 2024
 
 # INITIALIZATION
 #---------------
-units           real
+units           metal
 dimension           3
 processors      * * *
 boundary        p p p
 
 # ATOMS
 #------
-atom_style      charge
+atom_style      full
 read_data       atoms.dat
 
 # POTENTIAL
 #----------
-pair_style	reax/c lmp_control
-pair_coeff	* * ffield.reax.AB B N
-fix             PARAM all qeq/reax 1 0.0 10.0 1e-6 param.qeq
-
-neighbor	2 bin
-neigh_modify	every 10 delay 0 check no
-
-delete_atoms    overlap 0.2 all all     
+pair_style      hybrid/overlay tersoff ilp/graphene/hbn 8.0 1
+pair_coeff  	* * tersoff BNC.tersoff B N
+pair_coeff	* * ilp/graphene/hbn BNCH.ILP B N
+delete_atoms    overlap 0.2 all all    
 
 # PARAMETERS
 #-----------
-timestep        1
+timestep        0.001
+velocity        all create 300.0 42 dist gaussian
 
 # REGIONS
 #--------
@@ -93,10 +90,9 @@ fix     EQUI all nve
 run     50000
 unfix   EQUI
 
-# UNFIX
-#------
+# UNFREEZE
+#---------
 unfix   FREEZE
-unfix   PARAM
 
 # FINAL ATOMS
 #------------
