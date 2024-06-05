@@ -33,6 +33,8 @@ def add_layers(lattice: Lattice, angle: float = 0, num_layers: int = 2) -> Latti
     for _ in range(1, num_layers):
         if new_layer.to_interchange:
             new_layer.interchange()
+        if new_layer.full:
+            new_layer.atoms['molecule'] = new_layer.atoms['molecule'][0] + 1
             
         new_layer.rotate(angle = angle)
         new_layer.translate(trasl = [0, 0, lattice.z_step])

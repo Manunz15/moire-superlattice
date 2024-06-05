@@ -61,7 +61,7 @@ class HexLattice(Lattice):
         
         # id and z columns
         num_atoms: int = len(ATOMS)
-        z_COL: np.array = np.zeros(num_atoms)
+        zeros_COL: np.array = np.zeros(num_atoms)
         id_COL: np.array = np.arange(1, num_atoms + 1)
 
         # atoms type column
@@ -74,7 +74,11 @@ class HexLattice(Lattice):
         # insert columns
         ATOMS.insert(0, 'id', id_COL, True)
         ATOMS.insert(1, 'type', type_COL, True)
-        ATOMS.insert(4, 'z', z_COL, True)
+        ATOMS.insert(4, 'z', zeros_COL, True)
+
+        if self.full:
+            ATOMS.insert(1, 'molecule', zeros_COL.astype(int), True)
+            ATOMS.insert(3, 'q', zeros_COL.astype(int), True)
 
         self.add(ATOMS)
 

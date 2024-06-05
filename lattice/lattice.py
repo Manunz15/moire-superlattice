@@ -229,8 +229,6 @@ class Lattice:
         # atoms
         cols = ['id', 'type', 'x', 'y', 'z']
         if self.full:
-            self.atoms.insert(1, 'molecule', np.zeros(len(self.atoms)).astype(int), True)
-            self.atoms.insert(3, 'q', np.zeros(len(self.atoms)).astype(int), True)
             cols = ['id', 'molecule', 'type', 'q', 'x', 'y', 'z']
         f.write('\nAtoms\n\n')
         f.write(f'{self.atoms[cols].to_string(header = False, index = False, index_names = False)}')
