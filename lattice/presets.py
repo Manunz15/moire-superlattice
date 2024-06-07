@@ -13,7 +13,7 @@ lattices = {
     # step source: place holder
     # z step source: https://link.springer.com/article/10.1007/s11249-018-1078-y
     'h-BN': {
-        'potential': ['ffield.reax.AB', 'lmp_control', 'param.qeq'],
+        'potential': ['BNC.tersoff', 'BNCH.ILP'],
         'step': 1.45,
         'z_step': 3.35,
         'atom_types': {'B': {'id': 1, 'mass': 10.811},
