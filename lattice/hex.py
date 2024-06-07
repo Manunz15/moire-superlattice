@@ -79,7 +79,7 @@ class HexLattice(Lattice):
 
         if self.full:
             ATOMS.insert(1, 'molecule', ones_COL.astype(int), True)
-            ATOMS.insert(3, 'q', zeros_COL.astype(int), True)
+            ATOMS.insert(3, 'q', zeros_COL, True)
 
         self.add(ATOMS)
 
@@ -97,12 +97,12 @@ class HexLattice(Lattice):
         cut_box: list[tuple[float]] = [(min_x, min_y), (max_x + 1e-4, max_y + 1e-4)]
         moire_cell.cut(cut_box)
         moire_cell.rotate(90)
-
+        
         # new cell
         x_STEP = 2 * max_y
         y_STEP = 2 * max_x
-        COLUMNS = ['type', 'x', 'y', 'z']
-        UNIT_CELL = np.zeros([len(moire_cell.atoms), 4])
+        COLUMNS = moire_cell.atoms.columns[1:]
+        UNIT_CELL = np.zeros([len(moire_cell.atoms), len(COLUMNS)])
         for index, col in enumerate(COLUMNS):
             UNIT_CELL[:, index] = moire_cell.atoms[col].to_numpy()
 
@@ -111,6 +111,8 @@ class HexLattice(Lattice):
         ATOMS = self.duplicate_cell(UNIT_CELL, (x_STEP, y_STEP), [(0, rows), (0, cols)], COLUMNS, (1, 2))
         ATOMS.insert(0, 'id', np.arange(1, len(ATOMS) + 1).astype(int), True)
         ATOMS['type'] = ATOMS['type'].to_numpy().astype(int)
+        if self.full:
+            ATOMS['molecule'] = ATOMS['molecule'].to_numpy().astype(int)
 
         # save
         self.add(ATOMS)
