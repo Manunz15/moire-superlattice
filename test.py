@@ -2,6 +2,8 @@
 
 from lattice import HexLattice, add_layers
 
-hbn = HexLattice('h-BN', dim = (2, 1), angle = 1.5)
+lt = HexLattice('graphene', dim = (2, 2), angle = 5)
 # hbn.centering()
-print(hbn)
+print(lt)
+
+lt.plot()
