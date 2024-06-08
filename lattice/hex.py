@@ -17,8 +17,6 @@ class HexLattice(Lattice):
         else:
             self.create_bilayer(dim, angle)
 
-        self.centering()
-
     @staticmethod
     def moire_angle(angle: float) -> Any:
         n: int = int(- 0.5 + 0.5 / (np.sqrt(3) * np.tan(np.deg2rad(angle / 2))))
@@ -118,4 +116,5 @@ class HexLattice(Lattice):
 
         # save
         self.add(ATOMS)
-        self.box = [(min_y, rows * x_STEP + min_y), (min_x, cols * y_STEP + min_x), (-1e4, 1e4)]        
+        self.box = [(min_y, rows * x_STEP + min_y), (min_x, cols * y_STEP + min_x), (-1e4, 1e4)]
+        self.centering()        

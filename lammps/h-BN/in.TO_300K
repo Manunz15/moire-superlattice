@@ -9,21 +9,19 @@ boundary        p p p
 
 # ATOMS
 #------
-atom_style      charge
+atom_style      full
 read_data       atoms.dat
 
 # POTENTIAL
 #----------
-pair_style	reax/c lmp_control
-pair_coeff	* * ffield.reax.AB B N
-
-neighbor	2 bin
-neigh_modify	every 10 delay 0 check no
+pair_style      hybrid/overlay tersoff ilp/graphene/hbn 16.0 coul/shield 16.0
+pair_coeff  	* * tersoff BNC.tersoff B N
+pair_coeff	    * * ilp/graphene/hbn BNCH.ILP B N
+pair_coeff 	    1 2 coul/shield 0.70  
 
 # PARAMETERS
 #-----------
 timestep        1
-fix             PARAM all qeq/reax 1 0.0 10.0 1e-6 param.qeq
 
 # OUTPUTS
 #--------
@@ -52,8 +50,6 @@ unfix   HEATING
 fix     EQUI all nve
 run     10000
 unfix   EQUI
-
-unfix   PARAM
 
 # SAVE ATOMS
 #-----------
