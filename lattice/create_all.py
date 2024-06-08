@@ -1,6 +1,7 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, April 2024
 
 from copy import copy
+import os
 
 from lattice.hex import HexLattice
 from lattice.lattice import Lattice 
@@ -11,10 +12,10 @@ from utils.path import Path
 
 def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: str) -> None:
     # box
-    replacements = {'x_1i': round(lattice.box[0][0], 3),
-            'x_1f': round((lattice.box[0][1] + lattice.box[0][0]) / 2 - 0.05, 3),       # - xhi / 2 + xhi
-            'x_2i': round((lattice.box[0][1] + lattice.box[0][0]) / 2 + 0.05, 3),
-            'x_2f': round(lattice.box[0][1], 3)}
+    replacements = {'x_1i': round(lattice.box[0][0], 2),
+            'x_1f': round((lattice.box[0][1] + lattice.box[0][0]) / 2 - 0.05, 2),       # - xhi / 2 + xhi
+            'x_2i': round((lattice.box[0][1] + lattice.box[0][0]) / 2 + 0.05, 2),
+            'x_2f': round(lattice.box[0][1], 2)}
 
     # save
     print(path)
@@ -28,23 +29,17 @@ def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: 
 
 def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, 
                double: bool = False, rot: bool = False, interchange: bool = False, plot: str = None) -> None:
+    
     # files to copy
     files: list = copy(lattices[lattice]['potential'])
+    files = files if type(files) == list else [files]
+    files.append(lammps)
+    filenames = [os.path.join('lammps', lattice, file) for file in files]
 
-    if type(files) == list:
-        files.append(lammps)
-    else:
-        files = [files, lammps]
-
-    filenames = ['/'.join(['lammps', lattice, file]) for file in files]
-    
-    if type(DIMS) != list:
-        DIMS = [DIMS]
+    DIMS = DIMS if type(DIMS) == list else [DIMS]
 
     # iterate for shape
-    for dim in DIMS:
-        lt = HexLattice(lattice = lattice, dim = dim)
-        
+    for dim in DIMS:        
         if len(DIMS) == 1:
             dim_dir = ''
             dir_name = f'{dir_name}_{dim[0]}x{dim[1]}'

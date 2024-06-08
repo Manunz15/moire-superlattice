@@ -17,6 +17,8 @@ class HexLattice(Lattice):
         else:
             self.create_bilayer(dim, angle)
 
+        self.centering()
+
     @staticmethod
     def moire_angle(angle: float) -> Any:
         n: int = int(- 0.5 + 0.5 / (np.sqrt(3) * np.tan(np.deg2rad(angle / 2))))
@@ -108,7 +110,7 @@ class HexLattice(Lattice):
 
         # duplicate
         rows, cols = dim
-        ATOMS = self.duplicate_cell(UNIT_CELL, (x_STEP, y_STEP), [(0, rows), (0, cols)], COLUMNS, (1, 2))
+        ATOMS = self.duplicate_cell(UNIT_CELL, (x_STEP, y_STEP), [(0, rows), (0, cols)], COLUMNS, (-3, -2))
         ATOMS.insert(0, 'id', np.arange(1, len(ATOMS) + 1).astype(int), True)
         ATOMS['type'] = ATOMS['type'].to_numpy().astype(int)
         if self.full:

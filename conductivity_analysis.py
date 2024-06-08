@@ -2,11 +2,11 @@
 
 from analysis import Lampin, ExtrConductivity, MoireConductivity, Section
 
-sec = Section('../data/graphene/lv_conductivity/test_section_1.50', 'graphene')
+sec = Section('../data/graphene/test_section_1.50', 'graphene')
 sec.plot()
 
-exco = ExtrConductivity('../data/graphene/lv_conductivity/monolayer', 'graphene')
+exco = ExtrConductivity('../data/graphene/monolayer', 'graphene')
 exco.plot()
 
-moire = MoireConductivity('../data/graphene/lv_conductivity/angles', 'graphene')
+moire = MoireConductivity('../data/graphene/angles', 'graphene')
 moire.plot(err = True)

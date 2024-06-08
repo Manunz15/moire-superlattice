@@ -203,9 +203,6 @@ class Lattice:
         self.add(pd.DataFrame(DATA, columns = COLUMNS))
 
     def write_lammps(self, filename: str) -> None:
-        # centering 
-        self.centering()
-        
         f = open(filename, 'w')
 
         # initial comment
