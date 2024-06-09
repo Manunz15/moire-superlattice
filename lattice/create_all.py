@@ -10,16 +10,6 @@ from lattice.add_layers import add_layers
 from utils.file import replace
 from utils.path import Path
 
-def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: str) -> None:
-    # save
-    print(path)
-    path.copy(filenames = filenames)
-    lattice.write_lammps(filename = os.path.join(path.path, 'atoms.dat'))
-
-    # plot
-    if plot:
-        lattice.plot(projection = plot)
-
 def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, 
                double: bool = False, plot: str = None) -> None:
     
@@ -43,9 +33,10 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
         if ANGLES:
             for angle in ANGLES:
                 lt = HexLattice(lattice = lattice, dim = dim, angle = angle)
+                
                 angle_dir = '' if len(ANGLES) == 1 else f'angle_{angle:.2f}'
                 path = Path(path = [lt.lattice, dir_name, angle_dir, dim_dir])
-                save(lt, filenames, path, lammps, plot)
+                save(lt, filenames, path, plot)
                 
         # if angles are NOT specified
         else:
@@ -60,4 +51,14 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
             lt.create_box([box_pad[1], box_pad[0], box_pad[2]])
             
             path = Path(path = [lt.lattice, dir_name, dim_dir])
-            save(lt, filenames, path, lammps, plot)
+            save(lt, filenames, path, plot)
+
+def save(lattice: Lattice, filenames: list[str], path: Path, plot: str) -> None:
+    # save
+    print(path)
+    path.copy(filenames = filenames)
+    lattice.write_lammps(filename = os.path.join(path.path, 'atoms.dat'))
+
+    # plot
+    if plot:
+        lattice.plot(projection = plot)

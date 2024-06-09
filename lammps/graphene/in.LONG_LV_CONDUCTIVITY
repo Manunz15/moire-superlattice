@@ -16,17 +16,17 @@ read_data       atoms.dat
 #----------
 pair_style      airebo 5.0 0 0
 pair_coeff * * CH.airebo C    
-delete_atoms    overlap 0.2 all all     
 
 # PARAMETERS
 #-----------
 timestep        0.001
 velocity        all create 300.0 42 dist gaussian
+delete_atoms    overlap 0.2 all all     
 
 # REGIONS
 #--------
-region 1 block -100000 -0.05 -1000 1000 -1000 1000
-region 2 block 0.05 100000 -1000 1000 -1000 1000
+region 1 block -100000 -0.05 -10000 10000 -1000 1000
+region 2 block 0.05 100000 -10000 10000 -1000 1000
 region 3 block -2 2 -2 2 -1000 1000
 
 group left region 1
