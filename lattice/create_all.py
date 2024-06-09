@@ -11,16 +11,9 @@ from utils.file import replace
 from utils.path import Path
 
 def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: str) -> None:
-    # box
-    replacements = {'x_1i': round(lattice.box[0][0], 2),
-            'x_1f': round((lattice.box[0][1] + lattice.box[0][0]) / 2 - 0.05, 2),       # - xhi / 2 + xhi
-            'x_2i': round((lattice.box[0][1] + lattice.box[0][0]) / 2 + 0.05, 2),
-            'x_2f': round(lattice.box[0][1], 2)}
-
     # save
     print(path)
     path.copy(filenames = filenames)
-    replace(filename = os.path.join(path.path, lammps), replacements = replacements)
     lattice.write_lammps(filename = os.path.join(path.path, 'atoms.dat'))
 
     # plot
@@ -28,7 +21,7 @@ def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: 
         lattice.plot(projection = plot)
 
 def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGLES: list[float] = None, 
-               double: bool = False, rot: bool = False, plot: str = None) -> None:
+               double: bool = False, plot: str = None) -> None:
     
     # files to copy
     files: list = copy(lattices[lattice]['potential'])
@@ -57,13 +50,16 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
         # if angles are NOT specified
         else:
             lt = HexLattice(lattice = lattice, dim = dim)
-            if rot:
-                box_pad = lt.box_pad
-                lt.rotate(90)
-                lt.centering()
+            print(lt)
+
+            box_pad = lt.box_pad
+            lt.rotate(90)
+            lt.centering()
             if double:
                 lt = add_layers(lt, angle = 0)
-                lt.create_box([box_pad[1], box_pad[0], box_pad[2]])
-
+                
+            lt.create_box([box_pad[1], box_pad[0], box_pad[2]])
+            print(lt)
+            
             path = Path(path = [lt.lattice, dir_name, dim_dir])
             save(lt, filenames, path, lammps, plot)

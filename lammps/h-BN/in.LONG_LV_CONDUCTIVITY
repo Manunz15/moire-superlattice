@@ -27,8 +27,8 @@ delete_atoms    overlap 0.2 all all
 
 # REGIONS
 #--------
-region 1 block x_1i x_1f -1000 1000 -1000 1000
-region 2 block x_2i x_2f -1000 1000 -1000 1000
+region 1 block -100000 -0.05 -1000 1000 -1000 1000
+region 2 block 0.05 100000 -1000 1000 -1000 1000
 region 3 block -2 2 -2 2 -1000 1000
 
 group left region 1

@@ -210,9 +210,9 @@ class Lattice:
 
         # box dimensions
         x, y, z = self.box
-        f.write(f'{x[0]:.2f} {x[1]:.2f} xlo xhi\n')
-        f.write(f'{y[0]:.2f} {y[1]:.2f} ylo yhi\n')
-        f.write(f'{z[0]:.2f} {z[1]:.2f} zlo zhi\n')
+        f.write(f'{x[0]:.5f} {x[1]:.5f} xlo xhi\n')
+        f.write(f'{y[0]:.5f} {y[1]:.5f} ylo yhi\n')
+        f.write(f'{z[0]:.5f} {z[1]:.5f} zlo zhi\n')
 
         # masses
         f.write('\nMasses\n\n')
