@@ -50,7 +50,6 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
         # if angles are NOT specified
         else:
             lt = HexLattice(lattice = lattice, dim = dim)
-            print(lt)
 
             box_pad = lt.box_pad
             lt.rotate(90)
@@ -59,7 +58,6 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
                 lt = add_layers(lt, angle = 0)
                 
             lt.create_box([box_pad[1], box_pad[0], box_pad[2]])
-            print(lt)
             
             path = Path(path = [lt.lattice, dir_name, dim_dir])
             save(lt, filenames, path, lammps, plot)
