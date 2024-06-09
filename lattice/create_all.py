@@ -20,9 +20,9 @@ def save(lattice: Lattice, filenames: list[str], path: Path, lammps: str, plot: 
     # save
     print(path)
     path.copy(filenames = filenames)
-    replace(filename = '/'.join([path.path, lammps]), replacements = replacements)
-    lattice.write_lammps(filename = f'{path.path}/atoms.dat')
-    
+    replace(filename = os.path.join(path.path, lammps), replacements = replacements)
+    lattice.write_lammps(filename = os.path.join(path.path, 'atoms.dat'))
+
     # plot
     if plot:
         lattice.plot(projection = plot)
@@ -58,9 +58,12 @@ def create_all(lattice: str, lammps: str, dir_name: str, DIMS: list[tuple], ANGL
         else:
             lt = HexLattice(lattice = lattice, dim = dim)
             if rot:
+                box_pad = lt.box_pad
                 lt.rotate(90)
+                lt.centering()
             if double:
                 lt = add_layers(lt, angle = 0)
+                lt.create_box([box_pad[1], box_pad[0], box_pad[2]])
 
             path = Path(path = [lt.lattice, dir_name, dim_dir])
             save(lt, filenames, path, lammps, plot)

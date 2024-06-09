@@ -3,7 +3,7 @@
 from lattice import HexLattice, add_layers
 
 lt = HexLattice('graphene', dim = (2, 2), angle = 5)
-# hbn.centering()
+# lt.remove_overlapping_atoms()
 print(lt)
 
 lt.plot()

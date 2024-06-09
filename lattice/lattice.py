@@ -107,9 +107,6 @@ class Lattice:
         plt.ylabel('Number of atoms')
         plt.show()
 
-    def calculate_gr(self) -> None:
-        pass
-
     def centering(self) -> None:
         self.translate([- self.atoms['x'].mean(), - self.atoms['y'].mean(), - self.atoms['z'].mean()])
 
