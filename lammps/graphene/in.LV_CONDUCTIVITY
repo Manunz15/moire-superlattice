@@ -49,7 +49,9 @@ dump    1 all custom 5000 md.lammpstrj id type x y z vx vy vz
 
 # MINIMIZATION
 #-------------
+fix     RELAX all box/relax iso 0.0 vmax 0.01
 minimize 1.0e-10 1.0e-10 10000 10000
+unfix   RELAX
 
 # FREEZE
 #-------

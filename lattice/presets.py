@@ -1,7 +1,7 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, April 2024
 
 lattices = {
-    # source: https://en.wikipedia.org/wiki/Graphite#Structure 22/04/2024
+    # source: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6116708/ and https://en.wikipedia.org/wiki/Graphite#Structure
     'graphene': {
         'potential': 'CH.airebo',
         'step': 1.42,
@@ -10,12 +10,12 @@ lattices = {
         'to_interchange': False,
         'full': False
     },
-    # step source: place holder
-    # z step source: https://link.springer.com/article/10.1007/s11249-018-1078-y
+    # step source: https://www.nature.com/articles/s41467-021-26072-7
+    # z step source: https://www.sciencedirect.com/science/article/abs/pii/S0025540815300088
     'h-BN': {
         'potential': ['BNC.tersoff', 'BNCH.ILP'],
         'step': 1.45,
-        'z_step': 3.35,
+        'z_step': 3.33,
         'atom_types': {'B': {'id': 1, 'mass': 10.811},
                        'N': {'id': 2, 'mass': 14.007}},
         'to_interchange': True,
