@@ -57,6 +57,10 @@ def save(lattice: Lattice, filenames: list[str], path: Path, plot: str) -> None:
     # save
     print(path)
     path.copy(filenames = filenames)
+    
+    if abs(lattice.box[0][1] + lattice.box[0][0]) > 0.01:
+        raise Warning('The box is not perfectly symmetrical')
+    
     lattice.write_lammps(filename = os.path.join(path.path, 'atoms.dat'))
 
     # plot
