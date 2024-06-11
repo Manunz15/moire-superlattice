@@ -25,13 +25,16 @@ delete_atoms    overlap 0.2 all all
 
 # REGIONS
 #--------
-region 1 block -100000 -0.05 -10000 10000 -1000 1000
-region 2 block 0.05 100000 -10000 10000 -1000 1000
-region 3 block -2 2 -2 2 -1000 1000
+region 1 block INF -0.05 INF INF INF INF
+region 2 block 0.05 INF INF INF INF INF
+region 3 block INF INF $(ylo) $(ylo+2) INF INF
+region 4 block INF INF $(yhi-2) $(yhi) INF INF
 
 group left region 1
 group right region 2
-group freezed region 3
+group down region 3
+group top region 4
+group freezed union down top
 
 velocity freezed set 0.0 0.0 0.0
 
