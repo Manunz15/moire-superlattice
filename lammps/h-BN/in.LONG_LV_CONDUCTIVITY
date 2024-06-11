@@ -58,6 +58,8 @@ fix     RELAX all box/relax iso 0.0 vmax 0.01
 minimize 1.0e-10 1.0e-10 10000 10000
 unfix   RELAX
 
+print "new orthogonal box = ($(xlo) $(ylo) $(zlo)) to ($(xhi) $(yhi) $(zhi))"
+
 # FREEZE
 #-------
 fix 	FREEZE freezed setforce 0.0 0.0 0.0
