@@ -21,3 +21,6 @@ lattices = {
         'to_interchange': True,
         'full': True
     },}
+
+# add LJ-graphene
+lattices['LJ-graphene'] = lattices['graphene']

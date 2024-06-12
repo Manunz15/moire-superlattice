@@ -8,8 +8,8 @@ def read_box(filename: str) -> list[tuple[float]]:
     with open(filename, 'r') as f:
         for line in f:
             # box line
-            if 'orthogonal box' in line:
-                b = list(map(float, re.findall('[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?', line)))
+            if 'new orthogonal box' in line and '$' not in line:
+                b = list(map(float, re.findall(r'[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?', line)))
                 box = [(b[0], b[3]), (b[1], b[4]), (b[2], b[5])]
                 return box
         else:
