@@ -24,3 +24,7 @@ lattices = {
 
 # add LJ-graphene
 lattices['LJ-graphene'] = lattices['graphene']
+
+# add ILP-graphene
+lattices['ILP-graphene'] = lattices['graphene']
+lattices['ILP-graphene']['full'] = True 

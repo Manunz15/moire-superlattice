@@ -102,7 +102,7 @@ class Lampin(Printable):
                             p0 = [self.k_list[-1], 1], sigma = self.err_list)
 
         self.k = pars[0]
-        self.k_err = 0.05 * self.k  # from the study of section dependance
+        self.k_err = 0.075 * self.k  # from the study of section dependance
         self.y_fit: np.array = self.k_exp(self.thresholds, *pars)
         
         # plot

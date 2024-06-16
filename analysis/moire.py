@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 class MoireConductivity:
-    def __init__(self, path: str, lattice: str) -> None:
+    def __init__(self, path: str, lattice: str, plot: bool = False) -> None:
         # initialization
         self.path: str = path
         self.lattice: str = lattice
@@ -18,9 +18,9 @@ class MoireConductivity:
         self.angle_list: list[float] = []
         self.exco_list: list[ExtrConductivity] = []
 
-        self.read_data()
+        self.read_data(plot)
 
-    def read_data(self) -> None:
+    def read_data(self, plot: bool) -> None:
         for dir in tqdm(os.listdir(self.path), ascii = ' =', bar_format = '{l_bar}{bar:50}{r_bar}{bar:-10b}'):
             angle = float(dir.split('_')[-1])
             new_path = os.path.join(self.path, dir)
@@ -33,6 +33,9 @@ class MoireConductivity:
             self.err_list.append(exco.k_err)
             self.angle_list.append(round(angle, 2))
             self.exco_list.append(exco)
+
+            if plot:
+                exco.plot()
 
     def plot(self, err = False) -> None:
         if err:

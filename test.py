@@ -2,8 +2,5 @@
 
 from lattice import HexLattice, add_layers
 
-lt = HexLattice('graphene', dim = (2, 2), angle = 5)
-# lt.remove_overlapping_atoms()
-print(lt)
-
-lt.plot()
+lt = HexLattice('ILP-graphene', dim = (1, 1), angle = 1.5)
+lt.write_lammps('atoms.dat')
