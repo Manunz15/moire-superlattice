@@ -1,4 +1,4 @@
-# Lorenzo Manunza 6th May 2024
+# Lorenzo Manunza 17th May 2024
 
 # INITIALIZATION
 #---------------
@@ -22,7 +22,7 @@ pair_coeff	    * * ilp/graphene/hbn BNCH.ILP C
 #-----------
 timestep        0.001
 velocity        all create 300.0 42 dist gaussian
-delete_atoms    overlap 0.2 all all   
+delete_atoms    overlap 0.2 all all     
 
 # REGIONS
 #--------
@@ -94,7 +94,7 @@ thermo_style custom step atoms temp c_tL c_tR v_deltaT etotal
 # EQUILIBRATION
 #--------------
 fix     EQUI all nve
-run     25000
+run     50000
 unfix   EQUI
 
 # UNFREEZE
@@ -104,4 +104,3 @@ unfix   FREEZE
 # FINAL ATOMS
 #------------
 write_dump all custom final.atoms id type x y z vx vy vz
-
