@@ -24,32 +24,33 @@ class ExtrConductivity(Printable):
         self.inv_L_list: list[float] = []
         self.lampin_list: list[Lampin] = []
 
-        self.read_data()
-        self.extract_conductivity(plot)
+        self.read_data(plot)
+        self.extract_conductivity()
     
-    def read_data(self) -> None:
+    def read_data(self, plot: bool) -> None:
         for dir in os.listdir(self.path):
             new_path = os.path.join(self.path, dir)
             lp = Lampin(new_path, self.lattice, self.num_layers)
+            lp.plot()
 
             self.inv_k_list.append(1 / lp.k)
             self.inv_err_list.append(lp.k_err / lp.k ** 2)
             self.inv_L_list.append(1 / lp.L)
             self.lampin_list.append(lp)
 
+            if plot:
+                lp.plot()
+
     def polynomial(self, X: np.array, a: float, b: float, c: float) -> float:
         return a * X**2 + b * X + c
     
-    def extract_conductivity(self, plot: bool = False) -> None:
+    def extract_conductivity(self) -> None:
         pars, covs = curve_fit(f = self.polynomial, xdata = self.inv_L_list, ydata = self.inv_k_list, sigma = self.inv_err_list)
         self.k = 1 / pars[-1]
         self.k_err = np.sqrt(covs[-1][-1]) / pars[-1]**2
 
         self.X_fit = np.linspace(0, max(self.inv_L_list) * 1.2, 100)
         self.y_fit = self.polynomial(self.X_fit, * pars)
-
-        if plot:
-            self.plot()
 
     def plot(self) -> None:
         plt.errorbar(self.inv_L_list, self.inv_k_list, yerr = self.inv_err_list, fmt="o", zorder = 0)

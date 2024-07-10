@@ -2,5 +2,7 @@
 
 from lattice import HexLattice, add_layers
 
-lt = HexLattice('ILP-graphene', dim = (1, 1), angle = 1.5)
-lt.write_lammps('atoms.dat')
+# lt = HexLattice('graphene', dim = (1, 1), angle = 9.43)
+# lt.plot()
+
+print(HexLattice.moire_angle(7))
