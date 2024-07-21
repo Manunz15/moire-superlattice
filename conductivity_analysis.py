@@ -2,7 +2,7 @@
 
 from analysis import Lampin, ExtrConductivity, MoireConductivity, Section
 
-lattice = 'LJ-graphene'
+lattice = 'h-BN'
 
 # sec = Section(f'../data/{lattice}/test_section_1.50', lattice)
 # sec.plot()

@@ -23,9 +23,12 @@ lattices = {
     },}
 
 # add LJ-graphene
-lattices['LJ-graphene'] = lattices['graphene']
+lattices['LJ-graphene'] = lattices['graphene'].copy()
 
 # add ILP-graphene
-lattices['ILP-graphene'] = lattices['graphene']
+lattices['ILP-graphene'] = lattices['graphene'].copy()
 lattices['ILP-graphene']['potential'] = ['CH.airebo', 'BNCH.ILP']
 lattices['ILP-graphene']['full'] = True
+
+# add monolayer twisted graphene
+lattices['monolayer-graphene'] = lattices['graphene'].copy()

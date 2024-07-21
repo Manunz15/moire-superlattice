@@ -31,7 +31,6 @@ class ExtrConductivity(Printable):
         for dir in os.listdir(self.path):
             new_path = os.path.join(self.path, dir)
             lp = Lampin(new_path, self.lattice, self.num_layers)
-            lp.plot()
 
             self.inv_k_list.append(1 / lp.k)
             self.inv_err_list.append(lp.k_err / lp.k ** 2)
