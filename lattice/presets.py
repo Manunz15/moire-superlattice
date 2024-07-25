@@ -32,3 +32,4 @@ lattices['ILP-graphene']['full'] = True
 
 # add monolayer twisted graphene
 lattices['monolayer-graphene'] = lattices['graphene'].copy()
+lattices['strained-graphene'] = lattices['graphene'].copy()

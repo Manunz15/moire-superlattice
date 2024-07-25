@@ -1,6 +1,6 @@
 from lattice import HexLattice, create_all, Lattice
 
-lattice = 'monolayer-graphene'
+lattice = 'strained-graphene'
 lammps = 'in.LV_CONDUCTIVITY'
 long_lammps = 'in.LONG_LV_CONDUCTIVITY'
 
@@ -25,4 +25,4 @@ width, height = 40, 120
 DIMS = [(width, height * n) for n in range(1, 7 + 1)]
 create_all(lattice = lattice, DIMS = DIMS, dir_name = 'monolayer', lammps = lammps)
 
-create_all(lattice = lattice, DIMS = DIMS, double = True, dir_name = 'bilayer', lammps = lammps)
+# create_all(lattice = lattice, DIMS = DIMS, double = True, dir_name = 'bilayer', lammps = lammps)
