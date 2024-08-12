@@ -25,6 +25,9 @@ lattices = {
 # add LJ-graphene
 lattices['LJ-graphene'] = lattices['graphene'].copy()
 
+# add AB-graphene
+lattices['AB-graphene'] = lattices['LJ-graphene'].copy()
+
 # add ILP-graphene
 lattices['ILP-graphene'] = lattices['graphene'].copy()
 lattices['ILP-graphene']['potential'] = ['CH.airebo', 'BNCH.ILP']

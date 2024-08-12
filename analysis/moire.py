@@ -28,7 +28,7 @@ class MoireConductivity:
 
             if angle:
                 _, __, angle = hex.moire_angle(angle)
-
+            
             self.k_list.append(exco.k)
             self.err_list.append(exco.k_err)
             self.angle_list.append(round(angle, 2))

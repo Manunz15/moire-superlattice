@@ -1,4 +1,4 @@
-# Lorenzo Manunza 17th May 2024
+# Lorenzo Manunza 6th May 2024
 
 # INITIALIZATION
 #---------------
@@ -9,20 +9,19 @@ boundary        p p p
 
 # ATOMS
 #------
-atom_style      full
+atom_style      atomic
 read_data       atoms.dat
 
 # POTENTIAL
 #----------
-pair_style      hybrid/overlay airebo 3.0 0 0 ilp/graphene/hbn 16.0
-pair_coeff      * * airebo CH.airebo C      
-pair_coeff	    * * ilp/graphene/hbn BNCH.ILP C
+pair_style      airebo 3.0 1 0
+pair_coeff * * CH.airebo C       
 
 # PARAMETERS
 #-----------
 timestep        0.001
 velocity        all create 300.0 42 dist gaussian
-delete_atoms    overlap 0.2 all all     
+delete_atoms    overlap 0.2 all all   
 
 # REGIONS
 #--------
@@ -30,14 +29,20 @@ region 1 block INF -0.05 INF INF INF INF
 region 2 block 0.05 INF INF INF INF INF
 region 3 block INF INF $(ylo) $(ylo+2) INF INF
 region 4 block INF INF $(yhi-2) $(yhi) INF INF
+region 5 block INF INF INF INF 0.05 INF
 
 group left region 1
 group right region 2
 group down region 3
-group top region 4
-group freezed union down top
+group up region 4
+group top region 5
+group freezed union down up
 
 velocity freezed set 0.0 0.0 0.0
+
+# DISPLACE
+#---------
+displace_atoms top move 0 1.42 0 units lattice
 
 # COMPUTE
 #--------
@@ -94,7 +99,7 @@ thermo_style custom step atoms temp c_tL c_tR v_deltaT etotal
 # EQUILIBRATION
 #--------------
 fix     EQUI all nve
-run     50000
+run     25000
 unfix   EQUI
 
 # UNFREEZE
@@ -104,3 +109,4 @@ unfix   FREEZE
 # FINAL ATOMS
 #------------
 write_dump all custom final.atoms id type x y z vx vy vz
+

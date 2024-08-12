@@ -2,7 +2,7 @@
 
 from analysis import Lampin, ExtrConductivity, MoireConductivity, Section
 
-lattice = 'h-BN'
+lattice = 'graphene'
 
 # sec = Section(f'../data/{lattice}/test_section_1.50', lattice)
 # sec.plot()
@@ -13,5 +13,5 @@ lattice = 'h-BN'
 # exco = ExtrConductivity(f'../data/{lattice}/angles/angle_0.00', lattice, 2)
 # exco.plot()
 
-moire = MoireConductivity(f'../data/{lattice}/angles', lattice)
-moire.plot(err = True)
+# moire = MoireConductivity(f'../data/{lattice}/angles', lattice)
+# moire.plot(err = True)
