@@ -1,6 +1,6 @@
 from lattice import HexLattice, create_all, Lattice
 
-lattice = 'AB-graphene'
+lattice = 'AB-uncoupled-graphene'
 lammps = 'in.LV_CONDUCTIVITY'
 long_lammps = 'in.LONG_LV_CONDUCTIVITY'
 

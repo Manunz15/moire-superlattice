@@ -2,7 +2,10 @@
 
 from analysis import Lampin, ExtrConductivity, MoireConductivity, Section
 
-lattice = 'graphene'
+lattice = 'AB-uncpgraphene'
+
+exco = ExtrConductivity(f'../data/{lattice}/bilayer', lattice, 2)
+exco.plot()
 
 # sec = Section(f'../data/{lattice}/test_section_1.50', lattice)
 # sec.plot()
