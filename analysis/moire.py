@@ -4,14 +4,16 @@ from analysis.extrapolated import ExtrConductivity
 from lattice.hex import HexLattice as hex
 
 import os
+import pandas as pd
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 class MoireConductivity:
-    def __init__(self, path: str, lattice: str, plot: bool = False) -> None:
+    def __init__(self, path: str, lattice: str, num_layers: int = 2, plot: bool = False) -> None:
         # initialization
         self.path: str = path
         self.lattice: str = lattice
+        self.num_layers: int = num_layers
 
         self.k_list: list[float] = []
         self.err_list: list[float] = []
@@ -24,7 +26,7 @@ class MoireConductivity:
         for dir in tqdm(os.listdir(self.path), ascii = ' =', bar_format = '{l_bar}{bar:50}{r_bar}{bar:-10b}'):
             angle = float(dir.split('_')[-1])
             new_path = os.path.join(self.path, dir)
-            exco = ExtrConductivity(new_path, self.lattice, 2)
+            exco = ExtrConductivity(new_path, self.lattice, self.num_layers)
 
             if angle:
                 _, __, angle = hex.moire_angle(angle)
@@ -37,7 +39,7 @@ class MoireConductivity:
             if plot:
                 exco.plot()
 
-    def plot(self, err = False) -> None:
+    def plot(self, err = False) -> None:    
         if err:
             plt.errorbar(self.angle_list, self.k_list, yerr = self.err_list, marker = 'o')
         else:
@@ -45,3 +47,7 @@ class MoireConductivity:
         plt.xlabel(r'$\theta$°')
         plt.ylabel(r'k[W/K$\cdot$m]')
         plt.show()
+
+    def save(self, filename: str) -> None:
+        DF = pd.DataFrame({'angles': self.angle_list, 'k': self.k_list, 'k_err': self.err_list})
+        DF.to_csv(f'{filename}.csv')

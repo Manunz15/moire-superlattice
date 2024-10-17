@@ -4,14 +4,23 @@ import pandas as pd
 import re
 
 def read_box(filename: str) -> list[tuple[float]]:
+    box_lines = 0
+    box = []
+
     # read file
     with open(filename, 'r') as f:
         for line in f:
+            # print(line)
+            if box_lines:
+                box_lines -= 1
+                b = tuple(map(float, re.findall(r'[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?', line)))
+                box.append(b)
+                if len(box) == 3:
+                    return box
+
             # box line
-            if 'orthogonal box' in line and '$' not in line:
-                b = list(map(float, re.findall(r'[-+]?[.]?[\d]+(?:,\d\d\d)*[\.]?\d*(?:[eE][-+]?\d+)?', line)))
-                box = [(b[0], b[3]), (b[1], b[4]), (b[2], b[5])]
-                return box
+            if 'BOX BOUNDS' in line:
+                box_lines = 3
         else:
             raise NameError(f'There are not boxes in the file: {filename}')
 

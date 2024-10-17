@@ -6,6 +6,8 @@ lattices = {
         'potential': 'CH.airebo',
         'step': 1.42,
         'z_step': 3.35,
+        'err': 0.08,
+        'z_step_after': 3.29,
         'atom_types': {'C': {'id': 1, 'mass': 12.011}},
         'to_interchange': False,
         'full': False
@@ -16,6 +18,8 @@ lattices = {
         'potential': ['BNC.tersoff', 'BNCH.ILP'],
         'step': 1.45,
         'z_step': 3.33,
+        'err': 0.07,
+        'z_step_after': 3.32,
         'atom_types': {'B': {'id': 1, 'mass': 10.811},
                        'N': {'id': 2, 'mass': 14.007}},
         'to_interchange': True,
@@ -24,6 +28,7 @@ lattices = {
 
 # add LJ-graphene
 lattices['LJ-graphene'] = lattices['graphene'].copy()
+lattices['LJ-graphene']['err'] = 0.07
 
 # add AB-graphene
 lattices['AB-graphene'] = lattices['LJ-graphene'].copy()
@@ -38,4 +43,6 @@ lattices['ILP-graphene']['full'] = True
 
 # add monolayer twisted graphene
 lattices['monolayer-graphene'] = lattices['graphene'].copy()
+lattices['monolayer-graphene']['err'] = 0.09
 lattices['strained-graphene'] = lattices['graphene'].copy()
+lattices['strained-graphene']['err'] = 0.06
