@@ -1,8 +1,8 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, May 2024
 
-from analysis import Lampin, ExtrConductivity, MoireConductivity, Section
+from analysis import Lampin, ExtrConductivity, MoireConductivity, Section, AverageMoire
 
-lattice = 'h-BN'
+lattice = 'LJ-graphene'
 
 # for n in [1, 2, 3, 4, 5, 10, 20, 50]:
     # lp = Lampin(f'../data/{lattice}/AA stack/dim_40x120', lattice, num_exp = n) # save_path = '../latex/graphs/data/temp-LJ-bilayer')
@@ -31,6 +31,9 @@ lattice = 'h-BN'
 # exco = ExtrConductivity(f'../data/{lattice}/AB stack', lattice)
 # exco.save('../latex/graphs/data/moire/uncoupled AB stack', True)
 
-moire = MoireConductivity(f'../data/{lattice}/angles', lattice, num_layers = 2)
-moire.save('../latex/graphs/data/moire/hbn moire')
-moire.plot(err = True)
+# moire = MoireConductivity(f'../data/{lattice}/more_data', lattice, num_layers = 2)
+# # moire.save('../latex/graphs/data/moire/hbn moire')
+# moire.plot(err = True)
+
+ave_moire = AverageMoire([f'../data/{lattice}/angles', f'../data/{lattice}/more_data'], lattice, num_layers = 2)
+ave_moire.plot()

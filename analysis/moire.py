@@ -39,14 +39,16 @@ class MoireConductivity:
             if plot:
                 exco.plot()
 
-    def plot(self, err = False) -> None:    
+    def plot(self, err = True, hold = False) -> None:    
         if err:
             plt.errorbar(self.angle_list, self.k_list, yerr = self.err_list, marker = 'o')
         else:
             plt.plot(self.angle_list, self.k_list, marker = 'o')
         plt.xlabel(r'$\theta$°')
         plt.ylabel(r'k[W/K$\cdot$m]')
-        plt.show()
+
+        if not hold:
+            plt.show()
 
     def save(self, filename: str) -> None:
         DF = pd.DataFrame({'angles': self.angle_list, 'k': self.k_list, 'k_err': self.err_list})
