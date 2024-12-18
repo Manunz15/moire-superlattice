@@ -9,16 +9,17 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
-from scipy.signal import argrelmin
 
 class ExtrConductivity(Printable):
-    def __init__(self, path: str, lattice: str, num_layers: int = 2, plot: bool = False) -> None:
+    def __init__(self, paths: list[str], lattice: str, num_layers: int = 2, plot: bool = False) -> None:
         super().__init__()
 
         # initialization
-        self.path: str = path
+        self.paths: list[str] = paths
         self.lattice: str = lattice
         self.num_layers: int = num_layers
+
+        self.dict: dict[float, dict[str, list[float]]] = {}
 
         self.k: float = 0
         self.inv_k_list: list[float] = []
@@ -27,20 +28,41 @@ class ExtrConductivity(Printable):
         self.lampin_list: list[Lampin] = []
 
         self.read_data(plot)
+        self.calculate_averages()
         self.extract_conductivity()
     
     def read_data(self, plot: bool) -> None:
-        for dir in os.listdir(self.path):
-            new_path = os.path.join(self.path, dir)
-            lp = Lampin(new_path, self.lattice, self.num_layers)
+        for path in self.paths:
+            for dir in os.listdir(path):
+                new_path = os.path.join(path, dir)
+                lp = Lampin(new_path, self.lattice, self.num_layers)
 
-            self.inv_k_list.append(1 / lp.k)
-            self.inv_err_list.append(lp.k_err / lp.k ** 2)
-            self.inv_L_list.append(10 / lp.L)               # from angstrom to nm
-            self.lampin_list.append(lp)
+                L = round(lp.L, 3)
+                if L in self.dict.keys():
+                    self.dict[L]['k'].append(lp.k)
+                    self.dict[L]['k_err'].append(lp.k_err)
+                else:
+                    self.dict[L] = {'k': [lp.k], 'k_err': [lp.k_err]}
+                
+                if plot:
+                    lp.plot()
 
-            if plot:
-                lp.plot()
+    def calculate_averages(self) -> None:
+        for L, small_dict in self.dict.items():
+            ave_k, w_tot = 0, 0
+            for k, k_err in zip(small_dict['k'], small_dict['k_err']): 
+                w = 1 / k_err**2
+                w_tot += w
+                ave_k += k * w
+
+            # averages
+            ave_k /= w_tot
+            ave_k_err =  np.sqrt(1 / w_tot)
+
+            # saves data
+            self.inv_k_list.append(1 / ave_k) 
+            self.inv_L_list.append(10 / L)                      # from angstrom to nm
+            self.inv_err_list.append(ave_k_err / ave_k ** 2)
 
     def linear(self, X: np.array, a: float, b: float) -> float:
         return a * X + b

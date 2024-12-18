@@ -9,11 +9,15 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 class MoireConductivity:
-    def __init__(self, path: str, lattice: str, num_layers: int = 2, plot: bool = False) -> None:
+    def __init__(self, paths: list[str], lattice: str, num_layers: int = 2, plot: bool = False) -> None:
         # initialization
-        self.path: str = path
+        self.paths: list[str] = paths if type(paths) == list else [paths]
         self.lattice: str = lattice
         self.num_layers: int = num_layers
+
+        # find paths
+        self.dict: dict[float, list[str]] = {}
+        self.find_paths()
 
         self.k_list: list[float] = []
         self.err_list: list[float] = []
@@ -22,18 +26,27 @@ class MoireConductivity:
 
         self.read_data(plot)
 
-    def read_data(self, plot: bool) -> None:
-        for dir in tqdm(os.listdir(self.path), ascii = ' =', bar_format = '{l_bar}{bar:50}{r_bar}{bar:-10b}'):
-            angle = float(dir.split('_')[-1])
-            new_path = os.path.join(self.path, dir)
-            exco = ExtrConductivity(new_path, self.lattice, self.num_layers)
-
-            if angle:
+    def find_paths(self) -> None:
+        for path in self.paths:
+            for dir in os.listdir(path):
+                angle = float(dir.split('_')[-1])
                 _, __, angle = hex.moire_angle(angle)
+                angle = round(angle, 2)
+
+                new_path = os.path.join(path, dir)
+
+                if angle in self.dict.keys():
+                    self.dict[angle].append(new_path)
+                else:
+                    self.dict[angle] = [new_path]
+
+    def read_data(self, plot: bool) -> None:
+        for angle, paths in tqdm(self.dict.items(), ascii = ' =', bar_format = '{l_bar}{bar:50}{r_bar}{bar:-10b}'):
+            exco = ExtrConductivity(paths, self.lattice, self.num_layers)
             
             self.k_list.append(exco.k)
             self.err_list.append(exco.k_err)
-            self.angle_list.append(round(angle, 2))
+            self.angle_list.append(angle)
             self.exco_list.append(exco)
 
             if plot:

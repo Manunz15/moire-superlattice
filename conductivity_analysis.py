@@ -1,6 +1,6 @@
 # Lorenzo Manunza, Università degli Studi di Cagliari, May 2024
 
-from analysis import Lampin, ExtrConductivity, MoireConductivity, Section, AverageMoire
+from analysis import Lampin, ExtrConductivity, MoireConductivity, Section
 
 lattice = 'LJ-graphene'
 
@@ -35,5 +35,5 @@ lattice = 'LJ-graphene'
 # # moire.save('../latex/graphs/data/moire/hbn moire')
 # moire.plot(err = True)
 
-ave_moire = AverageMoire([f'../data/{lattice}/angles', f'../data/{lattice}/more_data'], lattice, num_layers = 2)
-ave_moire.plot()
+moire = MoireConductivity([f'../data/{lattice}/angles'], lattice, num_layers = 2)
+moire.plot()

@@ -5,4 +5,3 @@ from analysis.lampin import Lampin
 from analysis.extrapolated import ExtrConductivity
 from analysis.moire import MoireConductivity
 from analysis.section import Section
-from analysis.ave_moire import AverageMoire
