@@ -5,6 +5,7 @@ from lattice.hex import HexLattice as hex
 
 import os
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
@@ -60,8 +61,19 @@ class MoireConductivity:
         plt.xlabel(r'$\theta$°')
         plt.ylabel(r'k[W/K$\cdot$m]')
 
+        # k_list = []
+        # err_list = []
+        # for exco in self.exco_list:
+        #     arg = np.argmin(abs(np.array(exco.inv_L_list) - 0.01))
+        #     k = 1 / exco.inv_k_list[arg]
+        #     k_list.append(k)
+        #     err_list.append(k ** 2 * exco.inv_err_list[arg])
+
         if not hold:
             plt.show()
+        
+        # plt.errorbar(self.angle_list, k_list, yerr = err_list, marker = 'o')
+        # plt.show()
 
     def save(self, filename: str) -> None:
         DF = pd.DataFrame({'angles': self.angle_list, 'k': self.k_list, 'k_err': self.err_list})

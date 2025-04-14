@@ -94,8 +94,8 @@ class HexLattice(Lattice):
         # cutting moire cell
         L: float = float(self.step * (3 * np.cos(half_angle) * (2 * n + 1) + np.sqrt(3) * np.sin(half_angle)) / 2)
         min_x, max_x, min_y, max_y = - L / 2,  L / 2, - np.sqrt(3) * L / 2, np.sqrt(3) * L / 2
-        cut_box: list[tuple[float]] = [(min_x, min_y), (max_x + 1e-4, max_y + 1e-4)]
-        moire_cell.cut(cut_box)
+        self.cut_box: list[tuple[float]] = [(min_x, min_y), (max_x + 1e-4, max_y + 1e-4)]
+        moire_cell.cut(self.cut_box)
         moire_cell.rotate(90)
         
         # new cell

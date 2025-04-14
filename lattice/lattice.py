@@ -154,6 +154,14 @@ class Lattice:
         self.atoms['id'] = np.arange(1, len(self.atoms) + 1)
         self.atoms.reset_index(drop=True, inplace=True)
 
+    def cut_cell(self) -> None:
+        try:
+            self.rotate(-90)
+            self.cut(self.cut_box)
+            self.rotate(90)
+        except:
+            raise('This lattice does not have any cut box!')
+
     def remove_overlapping_atoms(self) -> None:
         self.write_lammps('lattice/remove_overlapping/atoms.dat')
 
@@ -169,6 +177,30 @@ class Lattice:
                 Linux = 'rm lattice/remove_overlapping/log.lammps')
         execute(Windows = r'del .\lattice\remove_overlapping\new.atoms',
                 Linux = 'rm lattice/remove_overlapping/new.atoms')
+
+    def calculate_distances(self) -> None:
+        lower_atoms = self.atoms.loc[self.atoms['z'] < 0]
+        upper_atoms = self.atoms.loc[self.atoms['z'] > 0]
+
+        x_low = lower_atoms['x'].to_numpy()
+        y_low = lower_atoms['y'].to_numpy()
+        x_up = upper_atoms['x'].to_numpy()
+        y_up = upper_atoms['y'].to_numpy()
+
+        # calculate distances
+        self.ave_distance = 0
+        distances = []
+        for _, row in upper_atoms.iterrows():
+            distances.append(min(np.sqrt((x_low - row['x'])**2 + (y_low - row['y'])**2 + self.z_step**2)))
+        for _, row in lower_atoms.iterrows():
+            distances.append(min(np.sqrt((x_up - row['x'])**2 + (y_up - row['y'])**2 + self.z_step**2)))
+
+        # insert z distances
+        self.atoms.insert(len(self.atoms.columns), 'z_distance', distances, True)
+
+    def calc_average_distance(self) -> None:
+        z_distances: np.ndarray = self.atoms['z_distance'].to_numpy()
+        self.ave_distance = z_distances.mean()
 
     def read(self, filename: str) -> None:
         # initialization
